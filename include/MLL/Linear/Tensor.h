@@ -8,20 +8,20 @@ namespace ml {
     {
     public:
         Tensor();
-        Tensor(const std::vector<size_t>& shape);
-        Tensor(const std::vector<size_t>& shape, const std::vector<double>& data);
+        Tensor(const std::vector<int>& shape);
+        Tensor(const std::vector<int>& shape, const std::vector<double>& data);
 
-        std::vector<size_t> getShape() const { return shape; }
+        std::vector<int> getShape() const { return shape; }
         std::vector<double> getData() const { return data; }
         
-        // Set data
+        // Data setting methods
         Tensor& fill(double value);
         Tensor& fill(const std::vector<double>& values);
         Tensor& randomize();
 
-        // Get access to tensor element
-        double operator()(const std::vector<size_t>& indices) const;
-        double& operator()(const std::vector<size_t>& indices);
+        // Indexing tensor methods
+        double operator()(const std::vector<int>& indices) const;
+        double& operator()(const std::vector<int>& indices);
 
         // Aggregate functions
 		double sum() const;
@@ -46,23 +46,23 @@ namespace ml {
 		Tensor& operator*=(const Tensor& other);
 		Tensor& operator/=(const Tensor& other);
 
-		Tensor operator+(double scalar) const;
-		Tensor operator-(double scalar) const;
-		Tensor operator*(double scalar) const;
-		Tensor operator/(double scalar) const;
+		Tensor operator+(double value) const;
+		Tensor operator-(double value) const;
+		Tensor operator*(double value) const;
+		Tensor operator/(double value) const;
 
-		Tensor& operator+=(double scalar);
-		Tensor& operator-=(double scalar);
-		Tensor& operator*=(double scalar);
-		Tensor& operator/=(double scalar);
+		Tensor& operator+=(double value);
+		Tensor& operator-=(double value);
+		Tensor& operator*=(double value);
+		Tensor& operator/=(double value);
 
     protected:
-        std::vector<size_t> shape;
+        std::vector<int> shape;
         std::vector<double> data;
-        size_t dataSize;
+        int dataSize;
 
 	private:
-		int calcIndex(const std::vector<size_t>& indices) const;
-		std::vector<int>& increaseIndices(std::vector<size_t>& indices) const;
+		int calcIndex(const std::vector<int>& indices) const;
+		std::vector<int>& increaseIndices(std::vector<int>& indices) const;
     };
 }

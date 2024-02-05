@@ -19,21 +19,22 @@ void benchmark(void (*func)(void), const char* func_name) {
 }
 
 void func1() {
-    std::vector<int> shape = {2, 3};
-    std::vector<double> data(10000000);
-    std::vector<int> indices = {1, 2};
-    double value = 1;
+    std::vector<int> vec1 = {1, 2, 3, 4, 5};
+    std::vector<int> vec2 = {6, 7, 8, 9, 10};
 
-	for (double& elem : data) { elem = value; }
+    for (int i = 0; i < vec1.size(); ++i) {
+        vec1[i] += vec2[i];
+    }
 }
 
 void func2() {
-    std::vector<int> shape = {2, 3};
-    std::vector<double> data(10000000);
-    std::vector<int> indices = {1, 2};
-    double value = 1;
+    std::vector<int> vec1 = {1, 2, 3, 4, 5};
+    std::vector<int> vec2 = {6, 7, 8, 9, 10};
 
-	for (int i = 0; i < data.size(); ++i) { data[i] = value; }
+    #pragma omp parallel for
+    for (int i = 0; i < vec1.size(); ++i) {
+        vec1[i] += vec2[i];
+    }
 }
 
 int main() {

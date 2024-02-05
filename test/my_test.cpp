@@ -1,19 +1,19 @@
+#include "MLL/Linear/Tensor.h"
 #include <gtest/gtest.h>
 #include <vector>
-#include "MLL/Linear/Tensor.h"
 
 TEST(TensorTesting, SettingData) {
     ml::Tensor t({2, 3});
 
-    t.fill(1.0d);
+    t.fill(1.0);
     for (size_t i = 0; i < t.getData().size(); ++i) {
-        EXPECT_TRUE(t.getData()[i] == 1.0d) << "Setting by constant isn't working!";
+        EXPECT_TRUE(t.getData()[i] == 1.0);
     }
 
-    std::vector<double> data = {1, 0, -1, 3};
+    std::vector<double> data = {1, 0, -1, 3, 4, 6};
     t.fill(data);
     for (int i = 0; i < data.size(); ++i) {
-        EXPECT_TRUE(t.getData()[i] == data[i]) << "Setting by data isn't working!";
+        EXPECT_TRUE(t.getData()[i] == data[i]);
     }
 }
 
@@ -49,7 +49,7 @@ TEST(TensorTesting, TrivialMathsOperations) {
     ml::Tensor t3({2, 2}, {4, 3, 6, 1});
     ml::Tensor t4({2, 2}, {-4, 1, 2, -3});
     ml::Tensor t5({2, 2}, {0, 3, 8, -2});
-    ml::Tensor t6({2, 2}, {0, 2, 2, -0.5d});
+    ml::Tensor t6({2, 2}, {0, 2, 2, -0.5});
 
     EXPECT_TRUE((t1 + t2) == t3);
     EXPECT_TRUE((t1 - t2) == t4);
@@ -68,4 +68,10 @@ TEST(TensorTesting, ScalarMathsOperations) {
     EXPECT_TRUE((t1 - 2) == t3);
     EXPECT_TRUE((t1 * -1) == t4);
     EXPECT_TRUE((t1 / 2) == t5);
+}
+
+
+
+TEST(MachineLearningTesting, TrivialModelCreation) {
+
 }

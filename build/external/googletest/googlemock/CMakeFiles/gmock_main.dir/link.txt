@@ -1,2 +1,0 @@
-D:\w64devkit\bin\ar.exe qc ..\..\..\lib\libgmock_main.a CMakeFiles/gmock_main.dir/src/gmock_main.cc.obj
-D:\w64devkit\bin\ranlib.exe ..\..\..\lib\libgmock_main.a

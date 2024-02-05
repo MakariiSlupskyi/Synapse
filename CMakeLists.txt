@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.28)
-project(Test 
+project(MLL
     VERSION 0.0.1
     LANGUAGES CXX)
 
@@ -14,16 +14,8 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 
 # Enable testing
 include(CTest)
-enable_testing()
 
 # Add subdirectories
 add_subdirectory(external)
-add_subdirectory(src/AI)
-add_subdirectory(src/Linear)
+add_subdirectory(src)
 add_subdirectory(test)
-
-# Link OpenMP
-find_package(OpenMP)
-if(OpenMP_CXX_FOUND)
-#    target_link_libraries(main PRIVATE OpenMP::OpenMP_CXX)
-endif()

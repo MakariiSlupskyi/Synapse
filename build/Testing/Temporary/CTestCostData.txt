@@ -1,0 +1,5 @@
+TensorTesting.SettingData 1 0.0048719
+TensorTesting.Comparising 1 0.0041846
+TensorTesting.TrivialAddition 1 0.0056961
+TensorTesting.TrivialSubtraction 1 0.0043234
+---

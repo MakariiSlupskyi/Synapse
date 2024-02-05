@@ -1,0 +1,3 @@
+"C:\Program Files\CMake\bin\cmake.exe" -E rm -f CMakeFiles\ml-linear.dir/objects.a
+D:\w64devkit\bin\ar.exe qc CMakeFiles\ml-linear.dir/objects.a @CMakeFiles\ml-linear.dir\objects1.rsp
+D:\w64devkit\bin\c++.exe -shared -o ..\..\bin\libml-linear.dll -Wl,--out-implib,..\..\lib\libml-linear.dll.a -Wl,--major-image-version,0,--minor-image-version,0 -Wl,--whole-archive CMakeFiles\ml-linear.dir/objects.a -Wl,--no-whole-archive @CMakeFiles\ml-linear.dir\linkLibs.rsp

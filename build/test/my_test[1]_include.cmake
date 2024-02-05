@@ -1,0 +1,5 @@
+if(EXISTS "D:/dev/MLL/build/test/my_test[1]_tests.cmake")
+  include("D:/dev/MLL/build/test/my_test[1]_tests.cmake")
+else()
+  add_test(my_test_NOT_BUILT my_test_NOT_BUILT)
+endif()

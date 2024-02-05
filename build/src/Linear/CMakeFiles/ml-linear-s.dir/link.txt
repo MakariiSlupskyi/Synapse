@@ -1,0 +1,2 @@
+D:\w64devkit\bin\ar.exe qc ..\..\lib\libml-linear-s.a "CMakeFiles/ml-linear-s.dir/Tensor.cpp.obj" "CMakeFiles/ml-linear-s.dir/Matrix.cpp.obj" "CMakeFiles/ml-linear-s.dir/Vector.cpp.obj"
+D:\w64devkit\bin\ranlib.exe ..\..\lib\libml-linear-s.a

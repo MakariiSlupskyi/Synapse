@@ -15,9 +15,10 @@ CMake build system is used here, so you'll need it downloaded. To build Synapse,
 ```bash
 mkdir build
 cd build
-cmake ..
+cmake -G "MinGW Makefiles" ..
 cmake --build .
 ```
+Note, that **Unix Makefiles** generator is preferred here
 
 ## How to use
 
@@ -31,7 +32,7 @@ You can find these in include and lib folders of Synapse's root folder respectiv
 
 ```bash
 g++ -c main.cpp -I<synapse-install-path>/include
-g++ main.o -o synapse-app -L<sfml-install-path>/lib -lsynapse-mll
+g++ main.o -o synapse-app -L<sfml-install-path>/lib -lsynapse-mll -lsynapse-linear
 ```
 
 **CMake:**
@@ -47,7 +48,7 @@ link_directories(${CMAKE_SOURCE_DIR}/lib)
 add_executable(synapse-test main.cpp)
 
 target_include_directories(${TARGET} PUBLIC ${CMAKE_SOURCE_DIR}/include)
-target_link_libraries(${TARGET} PUBLIC synapse-mll)
+target_link_libraries(${TARGET} PUBLIC synapse-mll synapse-linear)
 ```
 
 ## Examples of code

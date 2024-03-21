@@ -1,9 +1,14 @@
-#include "MLL/Linear/Tensor.h"
 #include <gtest/gtest.h>
 #include <vector>
 
+#include "Synapse/Linear.h"
+
+#include "Synapse/AI/model.h"
+#include "Synapse/AI/layers.h"
+#include "Synapse/AI/functions/activ_funcs.h"
+
 TEST(TensorTesting, SettingData) {
-    ml::Tensor t({2, 3});
+    syn::Tensor t({2, 3});
 
     t.fill(1.0);
     for (size_t i = 0; i < t.getData().size(); ++i) {
@@ -18,8 +23,8 @@ TEST(TensorTesting, SettingData) {
 }
 
 TEST(TensorTesting, SimpleIndexing) {
-    ml::Tensor t1({2, 3}, {0, 1, 2, 3, 4, 5});
-    ml::Tensor t2({2, 3, 2}, {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11});
+    syn::Tensor t1({2, 3}, {0, 1, 2, 3, 4, 5});
+    syn::Tensor t2({2, 3, 2}, {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11});
 
     EXPECT_EQ(t1({0, 0}), 0);
     EXPECT_EQ(t1({1, 1}), 4);
@@ -29,7 +34,7 @@ TEST(TensorTesting, SimpleIndexing) {
 }
 
 TEST(TensorTesting, AggregateFunctions) {
-    ml::Tensor t1({2, 3}, {0, 1, 2, 3, 4, 5});
+    syn::Tensor t1({2, 3}, {0, 1, 2, 3, 4, 5});
 
     EXPECT_EQ(t1.sum(), 15);
     EXPECT_EQ(t1.max(), 5);
@@ -37,20 +42,20 @@ TEST(TensorTesting, AggregateFunctions) {
 }
 
 TEST(TensorTesting, Comparising) {
-    ml::Tensor t1({2, 2}, {0, 1, 2, 3});
-    ml::Tensor t2({2, 2}, {0, 1, 2, 3});
+    syn::Tensor t1({2, 2}, {0, 1, 2, 3});
+    syn::Tensor t2({2, 2}, {0, 1, 2, 3});
 
     EXPECT_TRUE(t1 == t2);
 }
 
 TEST(TensorTesting, TrivialMathsOperations) {
-    ml::Tensor t1({2, 2}, {0, 2, 4, -1});
-    ml::Tensor t2({2, 2}, {4, 1, 2, 2});
-    ml::Tensor t3({2, 2}, {4, 3, 6, 1});
-    ml::Tensor t4({2, 2}, {-4, 1, 2, -3});
-    ml::Tensor t5({2, 2}, {0, 3, 8, -2});
-    ml::Tensor t6({2, 2}, {0, 2, 2, -0.5});
-
+    syn::Tensor t1({2, 2}, {0, 2, 4, -1});
+    syn::Tensor t2({2, 2}, {4, 1, 2, 2});
+    syn::Tensor t3({2, 2}, {4, 3, 6, 1});
+    syn::Tensor t4({2, 2}, {-4, 1, 2, -3});
+    syn::Tensor t5({2, 2}, {0, 3, 8, -2});
+    syn::Tensor t6({2, 2}, {0, 2, 2, -0.5});
+    
     EXPECT_TRUE((t1 + t2) == t3);
     EXPECT_TRUE((t1 - t2) == t4);
     EXPECT_TRUE((t1 * t2) == t5);
@@ -58,11 +63,11 @@ TEST(TensorTesting, TrivialMathsOperations) {
 }
 
 TEST(TensorTesting, ScalarMathsOperations) {
-    ml::Tensor t1({2, 2}, {0, 2, 4, -1});
-    ml::Tensor t2({2, 2}, {4, 6, 10, 3});
-    ml::Tensor t3({2, 2}, {-2, 0, 2, -3});
-    ml::Tensor t4({2, 2}, {0, -2, -4, 1});
-    ml::Tensor t5({2, 2}, {0, 1, 2, -0.5});
+    syn::Tensor t1({2, 2}, {0, 2, 4, -1});
+    syn::Tensor t2({2, 2}, {4, 6, 10, 3});
+    syn::Tensor t3({2, 2}, {-2, 0, 2, -3});
+    syn::Tensor t4({2, 2}, {0, -2, -4, 1});
+    syn::Tensor t5({2, 2}, {0, 1, 2, -0.5});
 
     EXPECT_TRUE((t1 + 4) == t2);
     EXPECT_TRUE((t1 - 2) == t3);
@@ -70,8 +75,39 @@ TEST(TensorTesting, ScalarMathsOperations) {
     EXPECT_TRUE((t1 / 2) == t5);
 }
 
+TEST(TensorTesting, MatrixMultiplication) {
+    syn::Tensor t1({3, 2}, {0, 2, 4, -1, 0, 2});
+    syn::Tensor t2({2, 1}, {4, 6});
 
+    auto t3 = t1.matMul(t2);
+
+    EXPECT_EQ(t3.getData()[0], 12);
+    EXPECT_EQ(t3.getData()[1], 10);
+    EXPECT_EQ(t3.getData()[2], 12);
+}
 
 TEST(MachineLearningTesting, TrivialModelCreation) {
-
+    syn::Model model({
+        new syn::Dense(2, 4),
+        new syn::Dense(4, 3)
+    });
 }
+
+TEST(MachineLearningTesting, TrivialInfenceWorkflow) {
+    syn::Model model({
+        new syn::Dense(2, 4),
+        new syn::Activation("relu"),
+        new syn::Dense(4, 5),
+        new syn::Activation("relu"),
+        new syn::Dense(5, 3),
+        new syn::Activation("sigmoid"),
+    });
+
+    auto input = syn::Vector(2);
+    input.randomize();
+
+    auto output = model.predict(input).getData();
+
+    EXPECT_EQ(output.size(), 3);
+}
+

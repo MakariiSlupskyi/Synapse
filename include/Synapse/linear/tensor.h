@@ -1,9 +1,8 @@
 #pragma once
 
-#include <initializer_list>
 #include <vector>
 
-namespace ml {
+namespace syn {
     class Tensor
     {
     public:
@@ -14,27 +13,43 @@ namespace ml {
         std::vector<int> getShape() const { return shape; }
         std::vector<double> getData() const { return data; }
         
-        // Data setting methods
+        // Data changing methods
         Tensor& fill(double value);
         Tensor& fill(const std::vector<double>& values);
+        Tensor& zeros();
+        Tensor& ones();
         Tensor& randomize();
-
-        // Indexing tensor methods
-        double operator()(const std::vector<int>& indices) const;
-        double& operator()(const std::vector<int>& indices);
-
+		Tensor& reshape(const std::vector<int>& shape);
+		Tensor& reverse();	
+	
         // Aggregate functions
 		double sum() const;
 		double max() const;
 		double min() const;
 
-        // Сomparison functions
+		// Matrix operations
+		Tensor matMul(const Tensor& other) const;
+		Tensor matTrans() const;
+		
+        // Element-wise operations and operators
+		Tensor& apply(double (*func)(double));
+		Tensor apply(double (*func)(double)) const;
+
+		Tensor& square();
+		Tensor& sqrt();
+		Tensor& abs();
+		Tensor& log();
+		Tensor& exp();
+
+		// Indexing
+
+
+        // Operators
+        double operator()(const std::vector<int>& indices) const;
+        double& operator()(const std::vector<int>& indices);
+		
 		bool operator==(const Tensor& other) const;
 		bool operator!=(const Tensor& other) const;
-
-        // Element-wise operations and operators
-		Tensor& applyFunc(double (*func)(double));
-		Tensor applyFunc(double (*func)(double)) const;
 
         Tensor operator+(const Tensor& other) const;
 		Tensor operator-(const Tensor& other) const;

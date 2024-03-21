@@ -1,20 +1,33 @@
-#include "MLL/AI/Data.h"
+#include "Synapse/AI/data.h"
 #include <stdexcept>
 
-ml::Data::Data(const std::vector<ml::Tensor>& data) : shape(data[0].getShape())
+syn::Data::Data(syn::Tensor* data, int lenght) : data(data), lenght(lenght)
+{}
+
+syn::Data::Data(const std::vector<int>& shape, const std::vector<std::vector<double>>& vecData)
+    : shape(shape), lenght(vecData.size())
 {
-    for (int i = 0; i < data.size() - 1; ++i) {
-        if (data[i] != data[i + 1]) {
-            throw std::invalid_argument("Invalid data!");
-        }
+    data = new syn::Tensor[vecData.size()];
+    for (int i = 0; i < lenght; ++i) {
+        data[i] = syn::Tensor(shape, vecData.at(i));
     }
 }
 
-ml::Data::Data(const std::vector<int>& shape, const std::vector<std::vector<double>>& data) 
-    : shape(shape.size() == 1 ? std::vector<int>{shape[0], 1} : shape)
+syn::Data::Data(const std::vector<syn::Tensor>& data) : shape(data[0].getShape()), lenght(data.size())
 {
-    this->data.reserve(data.size());
-    for (int i = 0; i < data.size(); ++i) {
-        this->data.emplace_back(shape, data[i]);
+    for (int i = 0; i < data.size() - 1; ++i) {
+        if (data[i] != data[i + 1]) {
+            throw std::invalid_argument("Invalid given data");
+        }
     }
+    this->data = new syn::Tensor[lenght];
+    std::copy(data.begin(), data.end(), this->data);
+}
+
+syn::Tensor& syn::Data::operator[](int index) {
+    return data[index];
+}
+
+syn::Tensor syn::Data::operator[](int index) const {
+    return data[index];
 }

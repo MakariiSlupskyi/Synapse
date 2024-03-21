@@ -5,43 +5,66 @@
 #include <algorithm>
 #include <numeric>
 #include <omp.h>
+#include <ctime>
+#include <cstdlib>
 
-const long int SIZE = 1 << 25;
+#include "Synapse/linear.h"
+#include "Synapse/AI/model.h"
+#include "Synapse/AI/layers.h"
+#include "Synapse/AI/data.h"
 
-void benchmark(void (*func)(void), const char* func_name) {
-    using namespace std::chrono;
-    auto start = high_resolution_clock::now();
-    func();
-    auto end = high_resolution_clock::now();
-    auto duration = duration_cast<microseconds>(end - start);
-
-    std::cout << "Elapsed time (" << func_name << "): " << duration.count() << '\n';
-}
-
-void func1() {
-    std::vector<int> vec1 = {1, 2, 3, 4, 5};
-    std::vector<int> vec2 = {6, 7, 8, 9, 10};
-
-    for (int i = 0; i < vec1.size(); ++i) {
-        vec1[i] += vec2[i];
+void print(const std::vector<double>& vec) {
+    for (int i = 0; i < vec.size() - 1; ++i) {
+        std::cout << vec[i] << ", ";
     }
-}
-
-void func2() {
-    std::vector<int> vec1 = {1, 2, 3, 4, 5};
-    std::vector<int> vec2 = {6, 7, 8, 9, 10};
-
-    #pragma omp parallel for
-    for (int i = 0; i < vec1.size(); ++i) {
-        vec1[i] += vec2[i];
-    }
+    std::cout << vec.back() << '\n';
 }
 
 int main() {
-    std::cout << "--- This Is a Benchmark Program ---\n\n";
+    std::srand(std::time(nullptr));
 
-    benchmark(func1, "test1");
-    benchmark(func2, "test2");
+    syn::Model model({
+        new syn::Dense(1, 5),
+        new syn::Activation("leaky relu"),
+        new syn::Dense(5, 1),
+    });
+    model.compile("GD", "MSE");
+
+    syn::Data training({1, 1}, {
+        {-1}, {0}, {1}, {2},
+    });
+
+    syn::Data labels({1, 1}, {
+        {-4}, {-2}, {2}, {4},
+    });
+
+    for (int i = 0; i < training.size(); ++i) {
+        print(model.predict(training[i]).getData());
+    }
+
+    model.train(training, labels, 1000);
+
+    for (int i = 0; i < training.size(); ++i) {
+        print(model.predict(training[i]).getData());
+    }
+
+    // model.save("model.txt");
+
+    // std::cout << "-------- model saved ---------" << std::endl;
+
+    // syn::Model model1;
+    // model1.load("model.txt");
+    // std::cout << "-------- model1 loaded ---------" << std::endl;
+    
+    // print(model1.predict(training[0]).getData());
+
+    // model1.save("model1.txt");
+
+    // std::cout << "------- model1 saved ----------" << std::endl;
+
+    // for (int i = 0; i < training.size(); ++i) {
+    //     print(model1.predict(training[i]).getData());
+    // }
 
     return 0;
 }

@@ -1,5 +1,5 @@
 # Add Linear algebra module subdirectory
-add_subdirectory(Linear)
+add_subdirectory(linear)
 
-# Add Macine learning module subdirectory
+# Add Machine learning module subdirectory
 add_subdirectory(AI)

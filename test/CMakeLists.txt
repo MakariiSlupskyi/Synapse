@@ -2,7 +2,7 @@ if (BUILD_TESTING)
     add_executable(my_test my_test.cpp)
 
     target_include_directories(my_test PRIVATE ${CMAKE_SOURCE_DIR}/include)
-    target_link_libraries(my_test PRIVATE GTest::gtest_main ml-ai-s)
+    target_link_libraries(my_test PRIVATE GTest::gtest_main synapse-mll synapse-linear)
 
     include(GoogleTest)
 
@@ -14,11 +14,5 @@ endif()
 add_executable(test_prog test_main.cpp)
 target_include_directories(test_prog PRIVATE ${CMAKE_SOURCE_DIR}/include)
 
-# Link MLL
-target_link_libraries(test_prog PRIVATE ml-ai ml-linear)
-
-# Link OpenMP
-find_package(OpenMP)
-if(OpenMP_CXX_FOUND)
-    target_link_libraries(test_prog PRIVATE OpenMP::OpenMP_CXX)
-endif()
+# Link Synapse
+target_link_libraries(test_prog PRIVATE synapse-mll synapse-linear)

@@ -20,8 +20,18 @@ namespace syn {
         Tensor& ones();
         Tensor& randomize();
 		Tensor& reshape(const std::vector<int>& shape);
+		Tensor reshape(const std::vector<int>& shape) const;
 		Tensor& reverse();	
 	
+		// N-dimentional indexing
+		Tensor chip(int axisInd, int index) const;
+		Tensor slice(const std::vector<int>& indices) const;
+		Tensor block(const std::vector<int>& start, const std::vector<int>& blockShape) const;
+		
+		Tensor& setChip(int axisInd, int index, const Tensor& other);
+		Tensor& setSlice(const std::vector<int>& indices, const Tensor& other);
+		Tensor& setBlock(const std::vector<int>& start, const Tensor& other);
+
         // Aggregate functions
 		double sum() const;
 		double max() const;
@@ -40,9 +50,6 @@ namespace syn {
 		Tensor& abs();
 		Tensor& log();
 		Tensor& exp();
-
-		// Indexing
-
 
         // Operators
         double operator()(const std::vector<int>& indices) const;

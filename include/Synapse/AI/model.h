@@ -21,12 +21,10 @@ namespace syn {
 		void train(const syn::Data& trainingData, const syn::Data& labels, int epoches = 1);
 
 		void save(const std::string& path) const;
-		syn::Model load(const std::string& path);
+		syn::Model& load(const std::string& path);
 
         void backward(const syn::Tensor& loss);
         void update(double rate);
-
-        void print();
 
     private:
         std::vector<syn::Layer*> layers;

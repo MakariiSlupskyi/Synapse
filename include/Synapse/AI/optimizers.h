@@ -2,6 +2,8 @@
 
 #include "Synapse/AI/optimizers/GD.h"
 #include "Synapse/AI/optimizers/SGD.h"
+#include <string>
+#include <map>
 
 namespace syn {
     extern const std::map<

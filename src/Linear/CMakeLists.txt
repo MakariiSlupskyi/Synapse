@@ -13,11 +13,6 @@ set(HEADERS
     ${INCROOT}/vector.h
 )
 
-
 # Add dynamic Linear algebra library
-add_library(ml-linear SHARED ${SOURCES} ${HEADERS})
-target_include_directories(ml-linear PUBLIC ${PROJECT_SOURCE_DIR}/include)
-
-# # Add static Linear algebra library
-add_library(ml-linear-s STATIC ${SOURCES} ${HEADERS})
-target_include_directories(ml-linear-s PUBLIC ${PROJECT_SOURCE_DIR}/include)
+add_library(synapse-linear SHARED ${SOURCES} ${HEADERS})
+target_include_directories(synapse-linear PUBLIC ${PROJECT_SOURCE_DIR}/include)

@@ -1,10 +1,5 @@
 #include <iostream>
 #include <vector>
-#include <chrono>
-#include <execution>
-#include <algorithm>
-#include <numeric>
-#include <omp.h>
 #include <ctime>
 #include <cstdlib>
 
@@ -42,29 +37,16 @@ int main() {
         print(model.predict(training[i]).getData());
     }
 
-    model.train(training, labels, 1000);
+    model.train(training, labels, 500);
+    model.save("model.txt");
+
+    syn::Model model1;
+    model1.load("model.txt");
+    model1.save("model1.txt");
 
     for (int i = 0; i < training.size(); ++i) {
-        print(model.predict(training[i]).getData());
+        print(model1.predict(training[i]).getData());
     }
-
-    // model.save("model.txt");
-
-    // std::cout << "-------- model saved ---------" << std::endl;
-
-    // syn::Model model1;
-    // model1.load("model.txt");
-    // std::cout << "-------- model1 loaded ---------" << std::endl;
-    
-    // print(model1.predict(training[0]).getData());
-
-    // model1.save("model1.txt");
-
-    // std::cout << "------- model1 saved ----------" << std::endl;
-
-    // for (int i = 0; i < training.size(); ++i) {
-    //     print(model1.predict(training[i]).getData());
-    // }
 
     return 0;
 }

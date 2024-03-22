@@ -14,6 +14,7 @@ set(SOURCES
 
     ${SRCROOT}/data.cpp
     ${SRCROOT}/functions.cpp
+    ${SRCROOT}/layers.cpp
     ${SRCROOT}/model.cpp
     ${SRCROOT}/optimizers.cpp
 )
@@ -42,11 +43,6 @@ set(HEADERS
 )
 
 # Add dynamic Machine learning library
-add_library(ml-ai SHARED ${SOURCES} ${HEADERS})
-target_include_directories(ml-ai PUBLIC ${PROJECT_SOURCE_DIR}/include)
-target_link_libraries(ml-ai PRIVATE ml-linear)
-
-# Add static Machine learning library
-add_library(ml-ai-s STATIC ${SOURCES} ${HEADERS})
-target_include_directories(ml-ai-s PUBLIC ${PROJECT_SOURCE_DIR}/include)
-target_link_libraries(ml-ai-s PRIVATE ml-linear-s)
+add_library(synapse-mll SHARED ${SOURCES} ${HEADERS})
+target_include_directories(synapse-mll PUBLIC ${PROJECT_SOURCE_DIR}/include)
+target_link_libraries(synapse-mll PUBLIC synapse-linear)

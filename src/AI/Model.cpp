@@ -62,10 +62,9 @@ void syn::Model::save(const std::string& path) const {
 	for (int i = 0; i < layers.size(); ++i) {
 		layers[i]->write(file);
 	}
-	file.close();
 }
 
-syn::Model syn::Model::load(const std::string& path) {
+syn::Model& syn::Model::load(const std::string& path) {
 	std::ifstream file(path);
 
 	if (!file.is_open()) {
@@ -83,20 +82,14 @@ syn::Model syn::Model::load(const std::string& path) {
 	std::getline(file, line);
 	int nLayer = std::stoi(line);
 
-	layers.reserve(nLayer);
+	// Read and create layers
 	for (int i = 0; i < nLayer; ++i) {
 		std::getline(file, line);
-
-		// if (line == "Activation") { layers.push_back(new syn::Activation(file)); }
-		// else if (line == "Dense") { layers.push_back(new syn::Dense(file)); }
-		// else { throw std::invalid_argument("Corrupted file: " + path); }
-
-		if (line == "Activation") { layers.emplace_back(new syn::Activation(file)); }
-		else if (line == "Dense") { layers.emplace_back(new syn::Dense(file)); }
-		else { throw std::invalid_argument("Corrupted file: " + path); }
+		layers.push_back(syn::file_layers.at(line)(file));
 	}
 
 	file.close();
+	
 	return *this;
 }
 
@@ -112,24 +105,5 @@ void syn::Model::update(double rate) {
 	for (int i = size - 1; i >= 0; --i) {
 		layers[i]->update(rate / size);
 		layers[i]->clearGradient();
-	}
-}
-
-#include <iostream>
-
-void print(const std::vector<double>& vec) {
-    for (int i = 0; i < vec.size() - 1; ++i) {
-        std::cout << vec[i] << ", ";
-    }
-    std::cout << vec.back() << '\n';
-}
-
-void syn::Model::print() {
-	std::cout << "optim: " << optimType << " loss: " << lossType << '\n';
-	
-	std::cout << "nLayer: " << layers.size() << '\n';
-
-	for (auto& layer : layers) {
-		std::cout << "layer size: ";
 	}
 }

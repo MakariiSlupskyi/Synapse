@@ -1,12 +1,9 @@
 #include "Synapse/linear/tensor.h"
 
-#include <numeric>
-#include <functional>
 #include <cstdlib>
-#include <execution>
+#include <cmath>
 #include <algorithm>
-#include <stdexcept>
-
+#include <execution>
 
 syn::Tensor::Tensor() : shape({1}), data({1}), dataSize(1)
 {}
@@ -65,6 +62,14 @@ syn::Tensor& syn::Tensor::reshape(const std::vector<int>& shape) {
 	return *this;
 }
 
+syn::Tensor syn::Tensor::reshape(const std::vector<int>& shape) const {
+	syn::Tensor res(*this);
+	res.shape = shape;
+    for (int i = 0; i < shape.size(); ++i) { res.dataSize *= shape[i]; }
+    res.data.resize(res.dataSize);
+	return res;
+}
+
 syn::Tensor& syn::Tensor::reverse() {
 	std::reverse(this->data.begin(), this->data.end());
 	return *this;
@@ -80,6 +85,85 @@ double syn::Tensor::max() const {
 
 double syn::Tensor::min() const {
 	return *std::min_element(data.begin(), data.end());
+}
+
+syn::Tensor syn::Tensor::chip(int axisInd, int index) const {
+	if (axisInd > shape.size() || index > shape[axisInd]) { throw std::invalid_argument("Invalid indices for chipping tensor."); }
+
+	std::vector<int> resShape(shape);
+	resShape.erase(resShape.begin() + axisInd);
+	syn::Tensor res(resShape);
+	std::vector<int> resInds(shape.size() - 1, 0), thisInds(shape.size(), 0);
+	
+	thisInds[axisInd] = index;
+	for (int i = 0; i < res.dataSize; ++i) {
+		for (int j = 0; j < resInds.size(); ++j) { thisInds.at((j < axisInd) ? j : j + 1) = resInds.at(j); }
+		res(resInds) = this->operator()(thisInds);
+		res.increaseIndices(resInds);
+	}
+	return res;
+}
+
+syn::Tensor syn::Tensor::slice(const std::vector<int>& indices) const {
+	if (indices.size() >= shape.size()) { throw std::invalid_argument("Invalid indices for slicing tensor."); }
+
+	if (indices.size() == 0) { return *this; }	
+	
+	syn::Tensor res = this->chip(0, indices.at(0));
+	if (indices.size() == 1) {
+		return res;
+	} else {
+		std::vector<int> nextIndices(indices.cbegin() + 1, indices.cend());
+		return res.slice(nextIndices);
+	}
+}
+
+syn::Tensor syn::Tensor::block(const std::vector<int>& start, const std::vector<int>& blockShape) const {
+	if (start.size() != shape.size() || blockShape.size() != shape.size()) {
+		throw std::invalid_argument("Invalid arguments for getting block of a tensor.");
+	}
+
+	syn::Tensor res(blockShape);
+	std::vector<int> resInds(shape.size()), thisInds(shape.size());
+	for (int i = 0; i < res.dataSize; ++i) {
+		for (int j = 0; j < blockShape.size(); ++j) {
+			thisInds.at(j) = resInds.at(j) + start.at(j);
+		}
+		res(resInds) = this->operator()(thisInds);
+		res.increaseIndices(resInds);
+	}
+	return res;
+}
+
+syn::Tensor& syn::Tensor::setChip(int axisInd, int index, const Tensor& other) {
+	std::vector<int> thisInds(shape.size(), 0), otherInds(shape.size() - 1, 0);
+	thisInds[axisInd] = index;
+	for (int i = 0; i < other.dataSize; ++i) {
+		for (int j = 0; j < otherInds.size(); ++j) { thisInds.at((j < axisInd) ? j : j + 1) = otherInds.at(j); }
+		this->operator()(thisInds) = other(otherInds);
+		other.increaseIndices(otherInds);
+	}
+	return *this;
+}
+
+syn::Tensor& syn::Tensor::setSlice(const std::vector<int>& indices, const Tensor& other) {
+	if (indices.size() == 0) {
+		this->data = other.data;
+	} else {
+		std::vector<int> indices_(indices.cbegin() + 1, indices.cend());
+		this->setChip(0, indices[0], this->chip(0, indices[0]).setSlice(indices_, other));
+	}
+	return *this;
+}
+
+syn::Tensor& syn::Tensor::setBlock(const std::vector<int>& start, const Tensor& other) {
+	std::vector<int> thisInds(shape.size(), 0), blockInds(shape.size(), 0);
+	for (int i = 0; i < other.dataSize; ++i) {
+		for (int j = 0; j < thisInds.size(); ++j) { thisInds.at(j) = start.at(j) + blockInds.at(j); }
+		this->operator()(thisInds) = other(blockInds);
+		other.increaseIndices(blockInds);
+	}
+	return *this;
 }
 
 syn::Tensor syn::Tensor::matMul(const syn::Tensor& other) const {
@@ -124,22 +208,33 @@ syn::Tensor syn::Tensor::apply(double (*func)(double)) const {
 	return res;
 }
 
-syn::Tensor syn::Tensor::operator+(const syn::Tensor& other) const {
-	if (this->operator!=(other)) {
-		throw std::runtime_error("Invalid given tensor shape for addition");
-	}
-	syn::Tensor res(*this);
-	std::transform(
-		std::execution::par_unseq,
-		res.data.begin(), res.data.end(),
-		other.data.begin(), res.data.begin(),
-		std::plus<double>());
-	return res;
-}
-
 syn::Tensor& syn::Tensor::square() {
 	std::transform(std::execution::par, data.begin(), data.end(), data.begin(),
 		[](double x) -> double { return x * x; });
+	return *this;
+}
+
+syn::Tensor& syn::Tensor::sqrt() {
+	std::transform(std::execution::par, data.begin(), data.end(), data.begin(),
+		[](double x) -> double { return x * x; });
+	return *this;
+}
+
+syn::Tensor& syn::Tensor::abs() {
+	std::transform(std::execution::par, data.begin(), data.end(), data.begin(),
+		[](double x) -> double { return std::abs(x); });
+	return *this;
+}
+
+syn::Tensor& syn::Tensor::log() {
+	std::transform(std::execution::par, data.begin(), data.end(), data.begin(),
+		[](double x) -> double { return std::log(x); });
+	return *this;
+}
+
+syn::Tensor& syn::Tensor::exp() {
+	std::transform(std::execution::par, data.begin(), data.end(), data.begin(),
+		[](double x) -> double { return std::exp(x); });
 	return *this;
 }
 
@@ -161,6 +256,19 @@ bool syn::Tensor::operator==(const syn::Tensor& other) const {
 
 bool syn::Tensor::operator!=(const syn::Tensor& other) const {
 	return !this->operator==(other);
+}
+
+syn::Tensor syn::Tensor::operator+(const syn::Tensor& other) const {
+	if (this->operator!=(other)) {
+		throw std::runtime_error("Invalid given tensor shape for addition");
+	}
+	syn::Tensor res(*this);
+	std::transform(
+		std::execution::par_unseq,
+		res.data.begin(), res.data.end(),
+		other.data.begin(), res.data.begin(),
+		std::plus<double>());
+	return res;
 }
 
 syn::Tensor syn::Tensor::operator-(const syn::Tensor& other) const {
@@ -325,4 +433,17 @@ int syn::Tensor::calcIndex(const std::vector<int>& indices) const {
         multiplier *= shape[i];
     }
     return result;
+}
+
+std::vector<int>& syn::Tensor::increaseIndices(std::vector<int>& indices) const {
+	indices.back() += 1;
+	for (int i = int(shape.size()) - 1; i >= 0; --i) {
+		if (indices.at(i) >= shape.at(i)) {
+			indices.at(i) = 0;
+			if (i != 0) { indices.at(i - 1) += 1; }
+		} else {
+			return indices;
+		}
+	}
+	return indices;
 }

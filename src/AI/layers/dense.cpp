@@ -49,8 +49,8 @@ void syn::Dense::clearGradient() {
 }
 
 void syn::Dense::update(double rate) {
-    weights -= (weightsGrad * rate);
-    biases -= (outputsGrad * rate);
+    weights -= weightsGrad * rate;
+    biases -= outputsGrad * rate;
 }
 
 void syn::Dense::write(std::ofstream& file) const {

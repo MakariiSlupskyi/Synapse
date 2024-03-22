@@ -37,7 +37,7 @@ int main() {
         print(model.predict(training[i]).getData());
     }
 
-    model.train(training, labels, 500);
+    model.train(training, labels, 500, false);
     model.save("model.txt");
 
     syn::Model model1;

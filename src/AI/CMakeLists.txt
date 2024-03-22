@@ -13,6 +13,7 @@ set(SOURCES
     ${SRCROOT}/layers/pooling.cpp
 
     ${SRCROOT}/data.cpp
+    ${SRCROOT}/dataset.cpp
     ${SRCROOT}/functions.cpp
     ${SRCROOT}/layers.cpp
     ${SRCROOT}/model.cpp
@@ -36,6 +37,7 @@ set(HEADERS
     ${INCROOT}/optimizers/SGD.h
 
     ${INCROOT}/data.h
+    ${INCROOT}/dataset.h
     ${INCROOT}/functions.h
     ${INCROOT}/layers.h
     ${INCROOT}/model.h

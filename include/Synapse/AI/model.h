@@ -18,7 +18,7 @@ namespace syn {
     
 		double evaluate(const syn::Data& inputs, const syn::Data& labels);
 		syn::Tensor predict(const syn::Tensor& inputs);
-		void train(const syn::Data& trainingData, const syn::Data& labels, int epoches = 1);
+		void train(const syn::Data& trainingData, const syn::Data& labels, int epoches = 1, bool printLoss = 1);
 
 		void save(const std::string& path) const;
 		syn::Model& load(const std::string& path);

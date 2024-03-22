@@ -39,12 +39,12 @@ syn::Tensor syn::Model::predict(const syn::Tensor& inputs) {
 	return output; 
 }
 
-void syn::Model::train(const syn::Data& inputs, const syn::Data& labels, int epoches) {
+void syn::Model::train(const syn::Data& inputs, const syn::Data& labels, int epoches, bool printLoss) {
 	if (optimizer == nullptr) {
 		optimizer = syn::optimizers.at(optimType)(this, &layers);
 	}
 	
-	optimizer->train(inputs, labels, epoches);
+	optimizer->train(inputs, labels, epoches, printLoss);
 }
 
 void syn::Model::save(const std::string& path) const {

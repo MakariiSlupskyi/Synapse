@@ -37,13 +37,14 @@ int main() {
         print(model.predict(training[i]).getData());
     }
 
-    model.train(training, labels, 500, false);
+    model.train(training, labels, 500, true);
     model.save("model.txt");
 
     syn::Model model1;
     model1.load("model.txt");
     model1.save("model1.txt");
 
+    std::cout << '\n';
     for (int i = 0; i < training.size(); ++i) {
         print(model1.predict(training[i]).getData());
     }

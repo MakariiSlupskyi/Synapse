@@ -10,6 +10,7 @@ namespace syn {
     {
     public:
         Model(const std::vector<syn::Layer*>& layers = {});
+        Model(std::string inputsPath, std::string labelsPath);
         ~Model();
         
         std::string getLossType() const { return lossType; }

@@ -1,11 +1,16 @@
 #include "Synapse/AI/model.h"
 #include "Synapse/AI/optimizers.h"
 #include "Synapse/AI/layers.h"
+#include "Synapse/AI/data.h"
 #include "Synapse/AI/functions.h"
 
 syn::Model::Model(const std::vector<syn::Layer*>& layers)
 : layers(layers), optimizer(nullptr), lossType("none")
 {}
+
+syn::Model::Model(std::string inputsPath, std::string labelsPath) {
+
+}
 
 syn::Model::~Model() {
 	for (int i = 0; i < layers.size(); ++i) {

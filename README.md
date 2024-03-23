@@ -32,7 +32,7 @@ You can find these in include and lib folders of Synapse's root folder respectiv
 
 ```bash
 g++ -c main.cpp -I<synapse-install-path>/include
-g++ main.o -o synapse-app -L<sfml-install-path>/lib -lsynapse-mll -lsynapse-linear
+g++ main.o -o synapse-app -L<synapse-install-path>/lib -lsynapse-mll -lsynapse-linear
 ```
 
 **CMake:**
@@ -89,7 +89,7 @@ int main() {
 ```
 ## Available functionality
 
-**ml::Model Interface Reference:**
+**syn::Model Interface Reference:**
 | Method's name | Explaination |
 | :------------- | :--- |
 | compile | Set optimizer and loss function |
@@ -97,7 +97,7 @@ int main() {
 | train | Train model |
 | evaluate | Get current loss value |
 
-**ml::Data Interface Reference:**
+**syn::Data Interface Reference:**
 | Method's name | Explaination |
 | :------------- | :--- |
 | shuffle | Shuffle data |

@@ -4,7 +4,7 @@
 #include "Synapse/linear.h"
 
 namespace syn {
-    class Dense : public syn::Layer
+    class Dense : public syn::ILayer
     {
     public:
         Dense(int nInput, int nOutput);

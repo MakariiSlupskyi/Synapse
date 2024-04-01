@@ -23,12 +23,15 @@ namespace syn {
 		Tensor reshape(const std::vector<int>& shape) const;
 		Tensor& reverse();	
 	
-		// N-dimentional indexing
-		Tensor chip(int axisInd, int index) const;
+		// indexing
+		double at(const std::vector<int>& indices) const;
+        double& at(const std::vector<int>& indices);
+
+		Tensor chip(int axisIndex, int index) const;
 		Tensor slice(const std::vector<int>& indices) const;
 		Tensor block(const std::vector<int>& start, const std::vector<int>& blockShape) const;
 		
-		Tensor& setChip(int axisInd, int index, const Tensor& other);
+		Tensor& setChip(int axisIndex, int index, const Tensor& other);
 		Tensor& setSlice(const std::vector<int>& indices, const Tensor& other);
 		Tensor& setBlock(const std::vector<int>& start, const Tensor& other);
 
@@ -84,7 +87,7 @@ namespace syn {
         int dataSize;
 
 	private:
-		int calcIndex(const std::vector<int>& indices) const;
-		std::vector<int>& increaseIndices(std::vector<int>& indices) const;
+		int getDataIndex(const std::vector<int>& indices) const;
+		void increaseIndices(std::vector<int>& indices) const;
     };
 }

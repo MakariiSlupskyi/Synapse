@@ -9,7 +9,7 @@ namespace syn {
     class Model
     {
     public:
-        Model(const std::vector<syn::Layer*>& layers = {});
+        Model(const std::vector<syn::ILayer*>& layers = {});
         Model(std::string inputsPath, std::string labelsPath);
         ~Model();
         
@@ -28,7 +28,7 @@ namespace syn {
         void update(double rate);
 
     private:
-        std::vector<syn::Layer*> layers;
+        std::vector<syn::ILayer*> layers;
         std::string lossType, optimType;
         syn::Optimizer* optimizer;
     };

@@ -1,26 +1,7 @@
 #include "Synapse/AI/functions/other_funcs.h"
+#include "Synapse/linear/tensor_funcs.h"
 #include <sstream>
 #include <cmath>
-
-syn::Tensor syn::abs(const syn::Tensor& tensor) {
-    return tensor.apply([](double x) -> double { return std::abs(x); });
-}
-
-syn::Tensor syn::square(const syn::Tensor& tensor) {
-    return tensor.apply([](double x) -> double { return x * x; });
-}
-
-syn::Tensor syn::log(const syn::Tensor& tensor) {
-    return tensor.apply([](double x) -> double { return std::log(x); });
-}
-
-syn::Tensor syn::exp(const syn::Tensor& tensor) {
-    return tensor.apply([](double x) -> double { return std::exp(x); });
-}
-
-syn::Tensor syn::reverse(const syn::Tensor& tensor) {
-    return syn::Tensor(tensor).reverse();
-}
 
 syn::Tensor syn::correlate2d(const syn::Tensor& input_, const syn::Tensor& kernel, const std::string& type) {
 	// if (input_.getShape().size() != 2 || kernel.getShape().size() != 2) {

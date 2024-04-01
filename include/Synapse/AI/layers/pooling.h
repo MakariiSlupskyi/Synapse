@@ -4,7 +4,7 @@
 #include "Synapse/linear/tensor.h"
 
 namespace syn {
-	class Pooling : public syn::Layer
+	class Pooling : public syn::ILayer
 	{
 	public:
 		Pooling(int poolSize, int strides = -1);

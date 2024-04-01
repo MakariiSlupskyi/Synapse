@@ -4,7 +4,7 @@
 #include "Synapse/linear/tensor.h"
 
 namespace syn {
-	class Flatten : public syn::Layer
+	class Flatten : public syn::ILayer
 	{
 	public:
 		Flatten() {}

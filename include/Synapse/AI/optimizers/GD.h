@@ -8,7 +8,7 @@
 namespace syn {
     class GD : public syn::Optimizer {
     public:
-        GD(syn::Model* model, std::vector<syn::Layer*>* layers, double rate = 0.1)
+        GD(syn::Model* model, std::vector<syn::ILayer*>* layers, double rate = 0.1)
         : syn::Optimizer(model, layers), rate(rate)
         {}
 

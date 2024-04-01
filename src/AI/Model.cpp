@@ -4,7 +4,7 @@
 #include "Synapse/AI/data.h"
 #include "Synapse/AI/functions.h"
 
-syn::Model::Model(const std::vector<syn::Layer*>& layers)
+syn::Model::Model(const std::vector<syn::ILayer*>& layers)
 : layers(layers), optimizer(nullptr), lossType("none")
 {}
 

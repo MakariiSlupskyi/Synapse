@@ -12,6 +12,6 @@
 namespace syn {
     extern const std::map<
         std::string,
-        std::function<syn::Layer*(std::ifstream& file)>
+        std::function<syn::ILayer*(std::ifstream& file)>
     > file_layers;
 }

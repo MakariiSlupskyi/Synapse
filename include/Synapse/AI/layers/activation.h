@@ -4,7 +4,7 @@
 #include <string>
 
 namespace syn {
-    class Activation : public syn::Layer
+    class Activation : public syn::ILayer
     {
     public:
         Activation(const std::string& type);

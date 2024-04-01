@@ -103,7 +103,7 @@ TEST(MachineLearningTesting, TrivialInfenceWorkflow) {
         new syn::Activation("sigmoid"),
     });
 
-    auto input = syn::Vector(2);
+    auto input = syn::Tensor({2, 1});
     input.randomize();
 
     auto output = model.predict(input).getData();

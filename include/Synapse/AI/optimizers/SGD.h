@@ -6,7 +6,7 @@
 namespace syn {
     class SGD : public syn::Optimizer {
     public:
-        SGD(syn::Model* model, std::vector<syn::Layer*>* layers, double rate = 0.05)
+        SGD(syn::Model* model, std::vector<syn::ILayer*>* layers, double rate = 0.05)
         : syn::Optimizer(model, layers), rate(rate)
         {}
 

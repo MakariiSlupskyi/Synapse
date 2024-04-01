@@ -3,14 +3,12 @@ set(SRCROOT ${PROJECT_SOURCE_DIR}/src/linear)
 
 set(SOURCES
     ${SRCROOT}/tensor.cpp
-    ${SRCROOT}/matrix.cpp
-    ${SRCROOT}/vector.cpp
+    ${SRCROOT}/tensor_funcs.cpp
 )
 
 set(HEADERS
     ${INCROOT}/tensor.h
-    ${INCROOT}/matrix.h
-    ${INCROOT}/vector.h
+    ${SRCROOT}/tensor_funcs.cpp
 )
 
 # Add dynamic Linear algebra library

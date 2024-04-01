@@ -37,7 +37,6 @@ syn::Tensor& syn::Tensor::fill(const std::vector<double>& values) {
     return *this;
 }
 
-
 syn::Tensor& syn::Tensor::zeros() {
 	std::fill(data.begin(), data.end(), 0.0);
     return *this;
@@ -87,27 +86,45 @@ double syn::Tensor::min() const {
 	return *std::min_element(data.begin(), data.end());
 }
 
-syn::Tensor syn::Tensor::chip(int axisInd, int index) const {
-	if (axisInd > shape.size() || index > shape[axisInd]) { throw std::invalid_argument("Invalid indices for chipping tensor."); }
+double syn::Tensor::at(const std::vector<int>& indices) const {
+    return data[getDataIndex(indices)];
+}
 
-	std::vector<int> resShape(shape);
-	resShape.erase(resShape.begin() + axisInd);
-	syn::Tensor res(resShape);
-	std::vector<int> resInds(shape.size() - 1, 0), thisInds(shape.size(), 0);
-	
-	thisInds[axisInd] = index;
-	for (int i = 0; i < res.dataSize; ++i) {
-		for (int j = 0; j < resInds.size(); ++j) { thisInds.at((j < axisInd) ? j : j + 1) = resInds.at(j); }
-		res(resInds) = this->operator()(thisInds);
-		res.increaseIndices(resInds);
+double& syn::Tensor::at(const std::vector<int>& indices) {
+    return data[getDataIndex(indices)];
+}
+
+syn::Tensor syn::Tensor::chip(int axisIndex, int index) const {
+	if (axisIndex > shape.size() || index > shape[axisIndex]) {
+		throw std::invalid_argument("Invalid indices for chipping tensor.");
 	}
-	return res;
+
+	// Prepare result tensor
+	std::vector<int> resShape(shape);
+	resShape.erase(resShape.begin() + axisIndex);
+	syn::Tensor result(resShape);
+
+	std::vector<int> resInds(shape.size() - 1), thisInds(shape.size());	
+	thisInds[axisIndex] = index;
+	for (int i = 0; i < result.dataSize; ++i) {
+		for (int j = 0; j < resInds.size(); ++j) {
+			thisInds.at((j < axisIndex) ? j : j + 1) = resInds.at(j); // skip 
+		}
+
+		result(resInds) = this->operator()(thisInds);
+		result.increaseIndices(resInds);
+	}
+	return result;
 }
 
 syn::Tensor syn::Tensor::slice(const std::vector<int>& indices) const {
-	if (indices.size() >= shape.size()) { throw std::invalid_argument("Invalid indices for slicing tensor."); }
+	if (indices.size() >= shape.size()) {
+		throw std::invalid_argument("Invalid indices for slicing tensor.");
+	}
 
-	if (indices.size() == 0) { return *this; }	
+	if (indices.size() == 0) {
+		return *this;
+	}	
 	
 	syn::Tensor res = this->chip(0, indices.at(0));
 	if (indices.size() == 1) {
@@ -239,11 +256,11 @@ syn::Tensor& syn::Tensor::exp() {
 }
 
 double syn::Tensor::operator()(const std::vector<int>& indices) const {
-    return data[calcIndex(indices)];
+    return data[getDataIndex(indices)];
 }
 
 double& syn::Tensor::operator()(const std::vector<int>& indices) {
-    return data[calcIndex(indices)];
+    return data[getDataIndex(indices)];
 }
 
 bool syn::Tensor::operator==(const syn::Tensor& other) const {
@@ -426,7 +443,7 @@ syn::Tensor& syn::Tensor::operator/=(double value) {
 	return *this;
 }
 
-int syn::Tensor::calcIndex(const std::vector<int>& indices) const {
+int syn::Tensor::getDataIndex(const std::vector<int>& indices) const {
     int result = 0, multiplier = 1;
     for (int i = shape.size() - 1; i >= 0; --i) {
         result += indices[i] * multiplier;
@@ -435,15 +452,15 @@ int syn::Tensor::calcIndex(const std::vector<int>& indices) const {
     return result;
 }
 
-std::vector<int>& syn::Tensor::increaseIndices(std::vector<int>& indices) const {
+void syn::Tensor::increaseIndices(std::vector<int>& indices) const {
 	indices.back() += 1;
-	for (int i = int(shape.size()) - 1; i >= 0; --i) {
+	for (int i = (int)shape.size() - 1; i >= 0; --i) {
 		if (indices.at(i) >= shape.at(i)) {
 			indices.at(i) = 0;
 			if (i != 0) { indices.at(i - 1) += 1; }
 		} else {
-			return indices;
+			return;
 		}
 	}
-	return indices;
+	return;
 }

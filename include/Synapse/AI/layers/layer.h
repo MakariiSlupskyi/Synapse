@@ -4,7 +4,7 @@
 #include <fstream>
 
 namespace syn {
-    class Layer
+    class ILayer
     {
     public:
         virtual syn::Tensor forward(const syn::Tensor& inputs) = 0;

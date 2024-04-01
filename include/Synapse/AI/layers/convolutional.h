@@ -4,7 +4,7 @@
 #include "Synapse/linear/tensor.h"
 
 namespace syn {
-    class Convolutional : public Layer
+    class Convolutional : public syn::ILayer
 	{
 	public:
 		Convolutional(const std::vector<int>& inputShape, const std::vector<int>& kernelShape, int depth);

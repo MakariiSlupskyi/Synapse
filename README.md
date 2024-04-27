@@ -15,10 +15,9 @@ CMake build system is used here, so you'll need it downloaded. To build Synapse,
 ```bash
 mkdir build
 cd build
-cmake -G "MinGW Makefiles" ..
+cmake -DCMAKE_BUILD_TYPE=Release ..
 cmake --build .
 ```
-Note, that **Unix Makefiles** generator is preferred here
 
 ## How to use
 

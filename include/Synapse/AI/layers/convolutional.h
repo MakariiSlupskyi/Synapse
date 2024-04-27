@@ -7,7 +7,7 @@ namespace syn {
     class Convolutional : public syn::ILayer
 	{
 	public:
-		Convolutional(const std::vector<int>& inputShape, const std::vector<int>& kernelShape, int depth);
+		Convolutional(const std::vector<int>& inputShape, int kernelSize, int depth);
 		Convolutional(std::ifstream& file);
 
         syn::Tensor forward(const syn::Tensor& inputs) override;
@@ -19,8 +19,8 @@ namespace syn {
         void write(std::ofstream& file) const override;
 
 	private:
-		std::vector<int> inputShape, kernelShape;
-		int depth, inputDepth;
-		syn::Tensor input, output, biases, kernels, kernelsGrad, outputsGrad;
+		std::vector<int> inputShape;
+		int depth, inputDepth, kernelSize;
+		syn::Tensor biases, kernels, input, output, kernelsGrad, outputsGrad;
 	};
 }

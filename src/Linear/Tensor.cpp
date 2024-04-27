@@ -3,7 +3,9 @@
 #include <cstdlib>
 #include <cmath>
 #include <algorithm>
+#include <functional>
 #include <execution>
+
 
 syn::Tensor::Tensor() : shape({1}), data({1}), dataSize(1)
 {}
@@ -61,7 +63,7 @@ syn::Tensor& syn::Tensor::reshape(const std::vector<int>& shape) {
 	return *this;
 }
 
-syn::Tensor syn::Tensor::reshape(const std::vector<int>& shape) const {
+syn::Tensor syn::Tensor::getReshaped(const std::vector<int>& shape) const {
 	syn::Tensor res(*this);
 	res.shape = shape;
     for (int i = 0; i < shape.size(); ++i) { res.dataSize *= shape[i]; }
@@ -108,7 +110,7 @@ syn::Tensor syn::Tensor::chip(int axisIndex, int index) const {
 	thisInds[axisIndex] = index;
 	for (int i = 0; i < result.dataSize; ++i) {
 		for (int j = 0; j < resInds.size(); ++j) {
-			thisInds.at((j < axisIndex) ? j : j + 1) = resInds.at(j); // skip 
+			thisInds.at((j < axisIndex) ? j : j + 1) = resInds.at(j);
 		}
 
 		result(resInds) = this->operator()(thisInds);
@@ -126,7 +128,10 @@ syn::Tensor syn::Tensor::slice(const std::vector<int>& indices) const {
 		return *this;
 	}	
 	
-	syn::Tensor res = this->chip(0, indices.at(0));
+	// Get a chip
+	syn::Tensor res = this->chip(0,  indices.at(0));
+	
+	
 	if (indices.size() == 1) {
 		return res;
 	} else {
@@ -144,7 +149,7 @@ syn::Tensor syn::Tensor::block(const std::vector<int>& start, const std::vector<
 	std::vector<int> resInds(shape.size()), thisInds(shape.size());
 	for (int i = 0; i < res.dataSize; ++i) {
 		for (int j = 0; j < blockShape.size(); ++j) {
-			thisInds.at(j) = resInds.at(j) + start.at(j);
+			thisInds[j] = resInds[j] + start[j];
 		}
 		res(resInds) = this->operator()(thisInds);
 		res.increaseIndices(resInds);
@@ -256,10 +261,20 @@ syn::Tensor& syn::Tensor::exp() {
 }
 
 double syn::Tensor::operator()(const std::vector<int>& indices) const {
+	for (int i = 0; i < indices.size(); ++i) {
+		if (shape[i] - 1 < indices[i]) {
+			throw std::runtime_error("Invalid indices for tensor indexing");
+		}
+	}
     return data[getDataIndex(indices)];
 }
 
 double& syn::Tensor::operator()(const std::vector<int>& indices) {
+	for (int i = 0; i < indices.size(); ++i) {
+		if (shape[i] - 1 < indices[i]) {
+			throw std::runtime_error("Invalid indices for tensor indexing");
+		}
+	}
     return data[getDataIndex(indices)];
 }
 
@@ -455,11 +470,13 @@ int syn::Tensor::getDataIndex(const std::vector<int>& indices) const {
 void syn::Tensor::increaseIndices(std::vector<int>& indices) const {
 	indices.back() += 1;
 	for (int i = (int)shape.size() - 1; i >= 0; --i) {
-		if (indices.at(i) >= shape.at(i)) {
-			indices.at(i) = 0;
-			if (i != 0) { indices.at(i - 1) += 1; }
-		} else {
+		if (indices.at(i) < shape.at(i)) {
 			return;
+		}
+		
+		indices.at(i) = 0;
+		if (i != 0) {
+			indices.at(i - 1) += 1;
 		}
 	}
 	return;

@@ -3,11 +3,11 @@
 
 syn::Tensor syn::Flatten::forward(const syn::Tensor& input) {
 	inputShape = input.getShape();
-	return syn::Tensor({(int)input.getData().size(), 0}, input.getData());
+	return input.getReshaped({int(input.getData().size()), 0});
 }
 
 syn::Tensor syn::Flatten::backward(const syn::Tensor& outputsGrad) {
-	return outputsGrad.reshape(inputShape);
+	return outputsGrad.getReshaped(inputShape);
 }
 
 void syn::Flatten::write(std::ofstream& file) const {

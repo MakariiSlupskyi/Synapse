@@ -21,6 +21,6 @@ namespace syn {
 	private:
 		std::vector<int> inputShape;
 		int depth, inputDepth, kernelSize;
-		syn::Tensor biases, kernels, input, output, kernelsGrad, outputsGrad;
+		syn::Tensor biases, kernels, input, output, kernelsGrad, biasesGrad;
 	};
 }

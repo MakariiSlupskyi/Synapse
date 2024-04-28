@@ -63,9 +63,9 @@ target_include_directories(synapse PUBLIC ${PROJECT_SOURCE_DIR}/include)
 add_library(synapse-s STATIC ${SOURCES} ${HEADERS})
 target_include_directories(synapse-s PUBLIC ${PROJECT_SOURCE_DIR}/include)
 
-set_target_properties(synapse synapse-s
+set_target_properties(synapse-s synapse
     PROPERTIES
+    LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/Synapse/bin"
+    RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/Synapse/bin"
     ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/Synapse/lib"
-    LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/Synapse/lib"
-    RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/Synapse/lib"
 )

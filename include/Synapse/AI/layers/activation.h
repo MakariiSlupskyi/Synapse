@@ -20,8 +20,8 @@ namespace syn {
 
     private:
         std::string type;
-        syn::Tensor (*func)(const syn::Tensor& tensor);
-        syn::Tensor (*prime)(const syn::Tensor& tensor);
+        syn::Tensor (*activFunc)(const syn::Tensor& tensor);
+        syn::Tensor (*activPrime)(const syn::Tensor& tensor);
         syn::Tensor inputs;
     };
 }

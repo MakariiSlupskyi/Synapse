@@ -45,6 +45,10 @@ syn::Tensor syn::Model::predict(const syn::Tensor& inputs) {
 }
 
 void syn::Model::train(const syn::Data& inputs, const syn::Data& labels, int epoches, bool printLoss) {
+	if (lossType == "" && optimType == "") {
+		throw std::invalid_argument("Model is not compiled so it cannot be trained\n");
+	}
+	
 	if (optimizer == nullptr) {
 		optimizer = syn::optimizers.at(optimType)(this, &layers);
 	}

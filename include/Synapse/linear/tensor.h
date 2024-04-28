@@ -20,9 +20,7 @@ namespace syn {
         Tensor& ones();
         Tensor& randomize();
 		Tensor& reverse();	
-
 		Tensor& reshape(const std::vector<int>& shape);
-		Tensor getReshaped(const std::vector<int>& shape) const;
 	
 		// indexing
 		double at(const std::vector<int>& indices) const;

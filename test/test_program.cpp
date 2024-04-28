@@ -69,12 +69,17 @@ int main() {
     });
 
     syn::Model model({
-        new syn::Convolutional({1, 3, 3}, 3, 3),
-        // new syn::Activation("sigmoid"),
-        // new syn::Flatten(),
-        // new syn::Dense(5, 1),
-        // new syn::Activation("sigmoid"),
+        new syn::Convolutional({1, 3, 3}, 3, 5),
+        new syn::Activation("sigmoid"),
+        new syn::Flatten(),
+        new syn::Dense(5, 1),
     });
+    model.compile("GD", "MSE");
+
+    print(model.predict(training[0]).getData());
+    print(model.predict(training[1]).getData());
+
+    model.train(training, labels, 100, true);
 
     print(model.predict(training[0]).getData());
     print(model.predict(training[1]).getData());

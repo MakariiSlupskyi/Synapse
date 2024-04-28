@@ -57,18 +57,21 @@ syn::Tensor& syn::Tensor::randomize() {
 }
 
 syn::Tensor& syn::Tensor::reshape(const std::vector<int>& shape) {
-	this->shape = shape;
-    for (int i = 0; i < shape.size(); ++i) { dataSize *= shape[i]; }
-    data.resize(dataSize);
-	return *this;
-}
+	// Calculate new size of data
+	int dataSize = 1;
+	for (int i = 0; i < shape.size(); ++i) {
+		dataSize *= shape[i];
+	}
 
-syn::Tensor syn::Tensor::getReshaped(const std::vector<int>& shape) const {
-	syn::Tensor res(*this);
-	res.shape = shape;
-    for (int i = 0; i < shape.size(); ++i) { res.dataSize *= shape[i]; }
-    res.data.resize(res.dataSize);
-	return res;
+	// If new size of data doesn't match with previous one, zero data
+	if (this->dataSize != dataSize) {
+        this->data = std::vector<double>(dataSize);
+    }
+
+	this->dataSize = dataSize;
+	this->shape = shape;
+	
+	return *this;
 }
 
 syn::Tensor& syn::Tensor::reverse() {

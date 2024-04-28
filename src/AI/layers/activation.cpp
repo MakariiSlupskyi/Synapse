@@ -2,7 +2,7 @@
 #include "Synapse/AI/functions.h"
 
 syn::Activation::Activation(const std::string& type)
-    : type(type), func(syn::activFuncs.at(type)), prime(syn::activPrimes.at(type))
+    : type(type), activFunc(syn::activFuncs.at(type)), activPrime(syn::activPrimes.at(type))
 {}
 
 syn::Activation::Activation(std::ifstream& file) {
@@ -13,11 +13,11 @@ syn::Activation::Activation(std::ifstream& file) {
 
 syn::Tensor syn::Activation::forward(const syn::Tensor& inputs) {
     this->inputs = inputs;
-    return func(inputs);
+    return activFunc(inputs);
 }
 
 syn::Tensor syn::Activation::backward(const syn::Tensor& outGrad) {
-    return outGrad * prime(inputs);
+    return outGrad * activPrime(inputs);
 }
 
 void syn::Activation::write(std::ofstream& file) const {

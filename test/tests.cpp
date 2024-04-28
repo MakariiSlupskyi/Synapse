@@ -1,8 +1,7 @@
 #include <gtest/gtest.h>
 #include <vector>
 
-#include "Synapse/Linear.h"
-
+#include "Synapse/linear.h"
 #include "Synapse/AI/model.h"
 #include "Synapse/AI/layers.h"
 #include "Synapse/AI/functions/activ_funcs.h"
@@ -80,8 +79,16 @@ TEST(Tensor, ScalarMathsOperations) {
     EXPECT_TRUE((t1 / 2) == t5);
 }
 
+TEST(Tensor, Reshaping) {
+    syn::Tensor tensor({2, 3}, {0, 1, 2, 3, 5, 6});
+    tensor.reshape({1, 6});
+
+    EXPECT_EQ(tensor({0, 5}), 6);
+}
+
 TEST(Tensor, GetSlice) {
 	syn::Tensor t({2, 3, 2}, {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11});
+
 	EXPECT_EQ(t.slice({0, 0}).getData().size(), 2) << "A mistake with shape";
 	EXPECT_EQ(t.slice({1, 0}).getData()[1], 7) << "A mistake while indexing";
 }
@@ -91,6 +98,7 @@ TEST(Tensor, GetBlock) {
         0, 1, 2,
         3, 4, 5
     });
+
 	EXPECT_EQ(t.block({0, 1}, {2, 2}).getData().size(), 4) << "A mistake with shape";
 	EXPECT_EQ(t.block({0, 1}, {2, 2})({0, 0}), 1) << "A mistake while indexing";
 	EXPECT_EQ(t.block({0, 1}, {2, 2})({0, 1}), 2) << "A mistake while indexing";
@@ -98,9 +106,13 @@ TEST(Tensor, GetBlock) {
 }
 
 TEST(Tensor, SetSlice) {
-	syn::Tensor t({2, 3, 2});
+	syn::Tensor t({2, 3});
 	t.fill(0);
-	t.setSlice({1, 1}, t.slice({0, 0}).fill(1));
+	t.setSlice({1}, t.slice({0}).fill(1));
+
+    EXPECT_EQ(t({0, 0}), 0);
+    EXPECT_EQ(t({1, 1}), 1);
+    EXPECT_EQ(t({1, 2}), 1);
 }
 
 TEST(Tensor, SetBlock) {
@@ -118,6 +130,32 @@ TEST(Tensor, MatrixMultiplication) {
     EXPECT_EQ(t3({0, 0}), 12);
     EXPECT_EQ(t3({1, 0}), 10);
     EXPECT_EQ(t3({2, 0}), 12);
+}
+
+TEST(TensorFunctions, Correlate2dValid) {
+    syn::Tensor tensor({3, 3}, {0, 1, 2, 3, 4, 5, 6, 7, 8});
+    syn::Tensor filter({2, 2});
+    filter.ones();
+
+    auto res = syn::convolve2d(tensor, filter, "valid");
+
+    EXPECT_EQ(res({0, 0}), 8);
+    EXPECT_EQ(res({0, 1}), 12);
+    EXPECT_EQ(res({1, 0}), 20);
+    EXPECT_EQ(res({1, 1}), 24);
+}
+
+TEST(TensorFunctions, Correlate2dFull) {
+    syn::Tensor tensor({3, 3}, {0, 1, 2, 3, 4, 5, 6, 7, 8});
+    syn::Tensor filter({2, 2});
+    filter.ones();
+
+    auto res = syn::convolve2d(tensor, filter, "valid");
+
+    EXPECT_EQ(res({0, 0}), 8);
+    EXPECT_EQ(res({0, 1}), 12);
+    EXPECT_EQ(res({1, 0}), 20);
+    EXPECT_EQ(res({1, 1}), 24);
 }
 
 TEST(AI, TrivialModelCreation) {

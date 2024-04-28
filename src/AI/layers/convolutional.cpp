@@ -1,21 +1,26 @@
 #include "Synapse/AI/layers/Convolutional.h"
 #include "Synapse/AI/functions/other_funcs.h"
-#include <exception>
+#include "Synapse/linear.h"
+#include <stdexcept>
 
 syn::Convolutional::Convolutional(const std::vector<int>& inputShape, int kernelSize, int depth)
 	: inputShape(inputShape), kernelSize(kernelSize), depth(depth)
 {
-	// Define needed data
-	int inputDepth = inputShape[0];
+	// Define temperary data
 	int inputHeight = inputShape[1];
 	int inputWidth = inputShape[2];
 	std::vector<int> outputShape = {depth, inputHeight - kernelSize + 1, inputWidth - kernelSize + 1};
 
 	// Define fields
+	inputDepth = inputShape[0];
 	input = syn::Tensor(inputShape);
 	output = syn::Tensor(outputShape);
+	
 	biases = syn::Tensor(outputShape);
 	kernels = syn::Tensor({depth, inputDepth, kernelSize, kernelSize});
+
+	biasesGrad = syn::Tensor(outputShape);
+	kernelsGrad = syn::Tensor({depth, inputDepth, kernelSize, kernelSize});
 
 	// Randomize layel data
 	kernels.randomize();
@@ -52,9 +57,9 @@ syn::Tensor syn::Convolutional::forward(const syn::Tensor& input) {
 
 	for (int i = 0; i < depth; ++i) {
 		syn::Tensor slice = output.slice({i}), kernel = kernels.slice({i});
+
 		for (int j = 0; j < inputDepth; ++j) {
-			// slice += syn::correlate2d(input.slice({j}), kernel.slice({j}), "valid");
-			auto t = syn::correlate2d(input.slice({j}), kernel.slice({j}), "valid");
+			slice += syn::correlate2d(input.slice({j}), kernel.slice({j}), "valid");
 		}
 
 		output.setSlice({i}, slice);
@@ -64,7 +69,6 @@ syn::Tensor syn::Convolutional::forward(const syn::Tensor& input) {
 }
 
 syn::Tensor syn::Convolutional::backward(const syn::Tensor& outGrad) {
-	syn::Tensor kernelsGrad(kernels.getShape());
 	syn::Tensor inputGrad(input.getShape());
 
 	for (int i = 0; i < depth; ++i) {
@@ -75,7 +79,7 @@ syn::Tensor syn::Convolutional::backward(const syn::Tensor& outGrad) {
 	}
     
 	this->kernelsGrad += kernelsGrad;
-	this->outputsGrad += outGrad;
+	this->biasesGrad += outGrad;
 
 	return inputGrad;
 }
@@ -83,12 +87,12 @@ syn::Tensor syn::Convolutional::backward(const syn::Tensor& outGrad) {
 
 void syn::Convolutional::clearGradient() {
     kernelsGrad.zeros();
-    outputsGrad.zeros();
+    biasesGrad.zeros();
 }
 
 void syn::Convolutional::update(double rate) {
 	kernels -= kernelsGrad * rate;
-	biases -= outputsGrad * rate;
+	biases -= biasesGrad * rate;
 }
 void syn::Convolutional::write(std::ofstream& file) const {
 	file << "Convolutional\n";

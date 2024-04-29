@@ -6,7 +6,6 @@
 #include <functional>
 #include <execution>
 
-
 syn::Tensor::Tensor() : shape({1}), data({1}), dataSize(1)
 {}
 
@@ -101,7 +100,7 @@ double& syn::Tensor::at(const std::vector<int>& indices) {
 
 syn::Tensor syn::Tensor::chip(int axisIndex, int index) const {
 	if (axisIndex > shape.size() || index > shape[axisIndex]) {
-		throw std::invalid_argument("Invalid indices for chipping tensor.");
+		throw std::invalid_argument("Invalid given indices for chipping tensor.");
 	}
 
 	// Prepare result tensor
@@ -124,7 +123,7 @@ syn::Tensor syn::Tensor::chip(int axisIndex, int index) const {
 
 syn::Tensor syn::Tensor::slice(const std::vector<int>& indices) const {
 	if (indices.size() >= shape.size()) {
-		throw std::invalid_argument("Invalid indices for slicing tensor.");
+		throw std::invalid_argument("Invalid given indices for slicing tensor.");
 	}
 
 	if (indices.size() == 0) {
@@ -193,7 +192,7 @@ syn::Tensor& syn::Tensor::setBlock(const std::vector<int>& start, const Tensor& 
 
 syn::Tensor syn::Tensor::matMul(const syn::Tensor& other) const {
 	if (shape.size() != 2 || other.shape.size() != 2 || shape[1] != other.shape[0]) {
-		throw std::runtime_error("Invalid tensor shape for matrix multiplication");
+		throw std::runtime_error("Invalid given tensor shape for matrix multiplication");
 	}
 	syn::Tensor result({shape[0], other.shape[1]});
 	result.fill(0.0);
@@ -209,7 +208,7 @@ syn::Tensor syn::Tensor::matMul(const syn::Tensor& other) const {
 
 syn::Tensor syn::Tensor::matTrans() const {
 	if (shape.size() != 2) {
-		throw std::runtime_error("Invalid tensor shape for matrix transposing");
+		throw std::runtime_error("Invalid given tensor shape for matrix transposing");
 	}
     const int nRow = shape[0];
     const int nCol = shape[1];
@@ -266,7 +265,7 @@ syn::Tensor& syn::Tensor::exp() {
 double syn::Tensor::operator()(const std::vector<int>& indices) const {
 	for (int i = 0; i < indices.size(); ++i) {
 		if (shape[i] - 1 < indices[i]) {
-			throw std::runtime_error("Invalid indices for tensor indexing");
+			throw std::runtime_error("Invalid given indices for tensor indexing");
 		}
 	}
     return data[getDataIndex(indices)];
@@ -275,7 +274,7 @@ double syn::Tensor::operator()(const std::vector<int>& indices) const {
 double& syn::Tensor::operator()(const std::vector<int>& indices) {
 	for (int i = 0; i < indices.size(); ++i) {
 		if (shape[i] - 1 < indices[i]) {
-			throw std::runtime_error("Invalid indices for tensor indexing");
+			throw std::runtime_error("Invalid given indices for tensor indexing");
 		}
 	}
     return data[getDataIndex(indices)];

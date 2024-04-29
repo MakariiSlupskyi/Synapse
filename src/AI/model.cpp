@@ -62,7 +62,7 @@ void syn::Model::save(const std::string& path) const {
 	if (!file.is_open()) {
 		throw std::invalid_argument("Failed to open file " + path + "\n");
 	} else if (lossType == "" || optimType == "") {
-		throw std::invalid_argument("Model can't be saved, because it's not compiled");
+		throw std::invalid_argument("Model is not compiled so it cannot be saved");
 	}
 
 	file << optimType << ' ' << lossType << '\n';

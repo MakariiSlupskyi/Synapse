@@ -19,7 +19,7 @@ syn::Data::Data(const std::vector<syn::Tensor>& data) : shape(data[0].getShape()
 {
     for (int i = 0; i < data.size() - 1; ++i) {
         if (data[i] != data[i + 1]) {
-            throw std::invalid_argument("Invalid given data");
+            throw std::invalid_argument("Invalid given data when creating an object of data");
         }
     }
     this->data = new syn::Tensor[lenght];
@@ -31,7 +31,7 @@ syn::Data::~Data() {
 }
 
 syn::Data& syn::Data::shuffle(int seed) {
-    if (seed != -1) { std::srand(seed); }   // Set seed if it is not default
+    if (seed != -1) { std::srand(seed); }  // Set seed if it is not default
 
     for (int i = 0; i < lenght; ++i) {
         int j = std::rand() % (lenght - i) + i;
@@ -42,11 +42,11 @@ syn::Data& syn::Data::shuffle(int seed) {
 
 syn::Data syn::Data::merge(const syn::Data& other) {
     if (shape.size() != other.size()) {
-        throw std::runtime_error("Invalid data for merging");
+        throw std::runtime_error("Invalid given data for merging with it");
     } else {
         for (int i = 0; i < shape.size(); ++i) {
             if (shape[i] != other.shape[i]) {
-                throw std::runtime_error("Invalid data for merging");
+                throw std::runtime_error("Invalid given data for merging with it");
             }
         }
     }

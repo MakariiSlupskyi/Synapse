@@ -1,58 +1,67 @@
-# Linear algebra submodule's directories
-set(LA_INCROOT ${PROJECT_SOURCE_DIR}/include/Synapse/linear)
-set(LA_SRCROOT ${PROJECT_SOURCE_DIR}/src/linear)
-
-# AI submodule's directories
-set(AI_INCROOT ${PROJECT_SOURCE_DIR}/include/Synapse/AI)
-set(AI_SRCROOT ${PROJECT_SOURCE_DIR}/src/AI)
+set(INCROOT ${PROJECT_SOURCE_DIR}/include/Synapse)
+set(SRCROOT ${PROJECT_SOURCE_DIR}/src)
 
 set(SOURCES
-    ${LA_SRCROOT}/tensor.cpp
-    ${LA_SRCROOT}/tensor_funcs.cpp
+    # Linear Algebra
+    ${SRCROOT}/linear/tensor.cpp
+    ${SRCROOT}/linear/tensor_funcs.cpp
 
-    ${AI_SRCROOT}/functions/activ_funcs.cpp
-    ${AI_SRCROOT}/functions/loss_funcs.cpp
-    ${AI_SRCROOT}/functions/other_funcs.cpp
+    # AI
+    ${SRCROOT}/AI/automated/SL/create.cpp
+    ${SRCROOT}/AI/automated/RL/generation.cpp
 
-    ${AI_SRCROOT}/layers/activation.cpp
-    ${AI_SRCROOT}/layers/convolutional.cpp
-    ${AI_SRCROOT}/layers/dense.cpp
-    ${AI_SRCROOT}/layers/flatten.cpp
-    ${AI_SRCROOT}/layers/pooling.cpp
+    ${SRCROOT}/AI/functions/activ_funcs.cpp
+    ${SRCROOT}/AI/functions/loss_funcs.cpp
+    ${SRCROOT}/AI/functions/other_funcs.cpp
 
-    ${AI_SRCROOT}/data.cpp
-    ${AI_SRCROOT}/dataset.cpp
-    ${AI_SRCROOT}/functions.cpp
-    ${AI_SRCROOT}/layers.cpp
-    ${AI_SRCROOT}/model.cpp
-    ${AI_SRCROOT}/optimizers.cpp
+    ${SRCROOT}/AI/layers/activation.cpp
+    ${SRCROOT}/AI/layers/convolutional.cpp
+    ${SRCROOT}/AI/layers/dense.cpp
+    ${SRCROOT}/AI/layers/flatten.cpp
+    ${SRCROOT}/AI/layers/pooling.cpp
+
+    ${SRCROOT}/AI/data.cpp
+    ${SRCROOT}/AI/dataset.cpp
+    ${SRCROOT}/AI/functions.cpp
+    ${SRCROOT}/AI/layers.cpp
+    ${SRCROOT}/AI/model.cpp
+    ${SRCROOT}/AI/optimizers.cpp
 )
 
 set(HEADERS
-    ${LA_INCROOT}/tensor.h
-    ${LA_INCROOT}/tensor_funcs.h
+    # Linear Algebra
+    ${INCROOT}/linear/tensor.h
+    ${INCROOT}/linear/tensor_funcs.h
+    ${INCROOT}/linear.h
 
-    ${AI_INCROOT}/functions/activ_funcs.h
-    ${AI_INCROOT}/functions/loss_funcs.h
-    ${AI_INCROOT}/functions/other_funcs.h
+    # AI
+    ${INCROOT}/AI/automated/RL/generation.h
+    ${INCROOT}/AI/automated/SL/create.h
+    ${INCROOT}/AI/automated/RL.h
+    ${INCROOT}/AI/automated/SL.h
 
-    ${AI_INCROOT}/layers/layer.h
-    ${AI_INCROOT}/layers/activation.h
-    ${AI_INCROOT}/layers/convolutional.h
-    ${AI_INCROOT}/layers/dense.h
-    ${AI_INCROOT}/layers/flatten.h
-    ${AI_INCROOT}/layers/pooling.h
+    ${INCROOT}/AI/functions/activ_funcs.h
+    ${INCROOT}/AI/functions/loss_funcs.h
+    ${INCROOT}/AI/functions/other_funcs.h
+
+    ${INCROOT}/AI/layers/layer.h
+    ${INCROOT}/AI/layers/activation.h
+    ${INCROOT}/AI/layers/convolutional.h
+    ${INCROOT}/AI/layers/dense.h
+    ${INCROOT}/AI/layers/flatten.h
+    ${INCROOT}/AI/layers/pooling.h
     
-    ${AI_INCROOT}/optimizers/optimizer.h
-    ${AI_INCROOT}/optimizers/GD.h
-    ${AI_INCROOT}/optimizers/SGD.h
+    ${INCROOT}/AI/optimizers/optimizer.h
+    ${INCROOT}/AI/optimizers/GD.h
+    ${INCROOT}/AI/optimizers/SGD.h
 
-    ${AI_INCROOT}/data.h
-    ${AI_INCROOT}/dataset.h
-    ${AI_INCROOT}/functions.h
-    ${AI_INCROOT}/layers.h
-    ${AI_INCROOT}/model.h
-    ${AI_INCROOT}/optimizers.h
+    ${INCROOT}/AI/automated.h
+    ${INCROOT}/AI/data.h
+    ${INCROOT}/AI/dataset.h
+    ${INCROOT}/AI/functions.h
+    ${INCROOT}/AI/layers.h
+    ${INCROOT}/AI/model.h
+    ${INCROOT}/AI/optimizers.h
 )
 
 # Add dynamic synapce library

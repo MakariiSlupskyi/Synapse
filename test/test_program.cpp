@@ -8,6 +8,8 @@
 #include "Synapse/AI/layers.h"
 #include "Synapse/AI/data.h"
 
+#include "Synapse/AI/automated.h"
+
 void print(const std::vector<double>& vec) {
     for (int i = 0; i < vec.size() - 1; ++i) {
         std::cout << vec[i] << ", ";
@@ -52,37 +54,48 @@ int main() {
     // }
 
     // Test 2
-    syn::Data training({1, 3, 3}, {
-        {
-            0, 1, 0,
-            1, 0, 1,
-            0, 1, 0,
-        }, {
-            1, 0, 1,
-            0, 1, 0,
-            1, 0, 1,
-        },
+    // syn::Data training({1, 3, 3}, {
+    //     {
+    //         0, 1, 0,
+    //         1, 0, 1,
+    //         0, 1, 0,
+    //     }, {
+    //         1, 0, 1,
+    //         0, 1, 0,
+    //         1, 0, 1,
+    //     },
+    // });
+
+    // syn::Data labels({1, 1}, {
+    //     {0}, {1},
+    // });
+
+    // syn::Model model({
+    //     new syn::Convolutional({1, 3, 3}, 3, 5),
+    //     new syn::Activation("sigmoid"),
+    //     new syn::Flatten(),
+    //     new syn::Dense(5, 1),
+    // });
+    // model.compile("GD", "MSE");
+
+    // print(model.predict(training[0]).getData());
+    // print(model.predict(training[1]).getData());
+
+    // model.train(training, labels, 100, true);
+
+    // print(model.predict(training[0]).getData());
+    // print(model.predict(training[1]).getData());
+
+    // Test 3
+    syn::Data inputs({1, 1}, {
+        {-1}, {0}, {1}, {2},
     });
 
     syn::Data labels({1, 1}, {
-        {0}, {1},
+        {-4}, {-2}, {2}, {4},
     });
 
-    syn::Model model({
-        new syn::Convolutional({1, 3, 3}, 3, 5),
-        new syn::Activation("sigmoid"),
-        new syn::Flatten(),
-        new syn::Dense(5, 1),
-    });
-    model.compile("GD", "MSE");
-
-    print(model.predict(training[0]).getData());
-    print(model.predict(training[1]).getData());
-
-    model.train(training, labels, 100, true);
-
-    print(model.predict(training[0]).getData());
-    print(model.predict(training[1]).getData());
+    auto model = syn::create(inputs, labels);
 
     return 0;
 }

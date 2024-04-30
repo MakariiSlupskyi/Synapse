@@ -483,3 +483,8 @@ void syn::Tensor::increaseIndices(std::vector<int>& indices) const {
 	}
 	return;
 }
+
+std::ostream& operator<<(std::ostream& os, const syn::Tensor& tensor) { 
+    os << "Printed Tensor...";
+	return os;
+}

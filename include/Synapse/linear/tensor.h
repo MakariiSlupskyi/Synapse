@@ -1,6 +1,7 @@
 #pragma once
 
 #include <vector>
+#include <ostream>
 
 namespace syn {
     class Tensor
@@ -90,3 +91,5 @@ namespace syn {
 		void increaseIndices(std::vector<int>& indices) const;
     };
 }
+
+std::ostream& operator<<(std::ostream& os, const syn::Tensor& tensor);

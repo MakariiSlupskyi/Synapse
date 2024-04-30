@@ -1,4 +1,4 @@
-set(NAME trivial-workflow)
+set(NAME trivial-usage)
 
 set(SOURCES ${EXAMPLE_PATH}/${NAME}/${NAME}.cpp)
 

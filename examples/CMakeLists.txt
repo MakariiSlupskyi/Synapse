@@ -18,6 +18,6 @@ endmacro(add_synapse_example)
 
 
 # Add examples subdirectories
-add_subdirectory(trivial-workflow)
+add_subdirectory(trivial-usage)
 add_subdirectory(creating-cnn)
 add_subdirectory(parsing-data)

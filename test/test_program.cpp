@@ -88,7 +88,7 @@ int main() {
 
     // Test 3
     syn::Data inputs({1, 1}, {
-        {-1}, {0}, {1}, {2},
+        {0}, {1}, {2},
     });
 
     syn::Data labels({1, 1}, {
@@ -98,6 +98,9 @@ int main() {
     auto model = syn::create(inputs, labels);
  
     model.save("model.txt");
+
+    syn::Model model2;
+    model2.load("model.txt");
 
     return 0;
 }

@@ -34,6 +34,7 @@ set(HEADERS
     ${INCROOT}/linear/tensor.h
     ${INCROOT}/linear/tensor_funcs.h
     ${INCROOT}/linear.h
+    ${INCROOT}/AI.h
 
     # AI
     ${INCROOT}/AI/automated/RL/generation.h

@@ -96,6 +96,8 @@ int main() {
     });
 
     auto model = syn::create(inputs, labels);
+ 
+    model.save("model.txt");
 
     return 0;
 }

@@ -5,18 +5,18 @@
 #include "Synapse/AI/functions.h"
 
 syn::Model::Model(const std::vector<syn::ILayer*>& layers)
-: layers(layers), optimizer(nullptr), lossType("none")
+: layers(layers), optimizer(nullptr), lossType(""), optimType("")
 {}
 
-syn::Model::Model(std::string inputsPath, std::string labelsPath) {
-
-}
-
-syn::Model::~Model() {
-	for (int i = 0; i < layers.size(); ++i) {
-		delete layers[i];
+syn::Model::Model(const syn::ModelBuilder& builder) : optimizer(nullptr)
+{
+	layers.resize(builder.getNumLayer());
+	for (int i = 0; i < builder.getNumLayer(); ++i) {
+		layers[i] = builder.getLayers()[i];
 	}
-	delete optimizer;
+	
+	this->lossType = builder.getLossType();
+	this->optimType = builder.getOptimType();
 }
 
 void syn::Model::compile(const std::string& optimType, const std::string& lossType) {
@@ -45,7 +45,7 @@ syn::Tensor syn::Model::predict(const syn::Tensor& inputs) {
 }
 
 void syn::Model::train(const syn::Data& inputs, const syn::Data& labels, int epoches, bool printLoss) {
-	if (lossType == "" && optimType == "") {
+	if (lossType == "" || optimType == "") {
 		throw std::invalid_argument("Model is not compiled so it cannot be trained\n");
 	}
 	

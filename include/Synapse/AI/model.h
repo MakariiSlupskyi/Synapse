@@ -3,6 +3,7 @@
 #include "Synapse/AI/layers/layer.h"
 #include "Synapse/AI/data.h"
 #include "Synapse/AI/optimizers/optimizer.h"
+#include "Synapse/AI/automated/SL/model_builder.h"
 #include <string>
 
 namespace syn {
@@ -10,8 +11,8 @@ namespace syn {
     {
     public:
         Model(const std::vector<syn::ILayer*>& layers = {});
-        Model(std::string inputsPath, std::string labelsPath);
-        ~Model();
+        Model(const syn::ModelBuilder& builder);
+        // ~Model();
         
         std::string getLossType() const { return lossType; }
 
@@ -19,7 +20,7 @@ namespace syn {
     
 		double evaluate(const syn::Data& inputs, const syn::Data& labels);
 		syn::Tensor predict(const syn::Tensor& inputs);
-		void train(const syn::Data& trainingData, const syn::Data& labels, int epoches = 1, bool printLoss = 1);
+		void train(const syn::Data& trainingData, const syn::Data& labels, int epoches = 1, bool printLoss = 0);
 
 		void save(const std::string& path) const;
 		syn::Model& load(const std::string& path);

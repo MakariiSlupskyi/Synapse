@@ -7,8 +7,9 @@ set(SOURCES
     ${SRCROOT}/linear/tensor_funcs.cpp
 
     # AI
-    ${SRCROOT}/AI/automated/SL/create.cpp
     ${SRCROOT}/AI/automated/RL/generation.cpp
+    ${SRCROOT}/AI/automated/SL/create.cpp
+    ${SRCROOT}/AI/automated/SL/model_builder.cpp
 
     ${SRCROOT}/AI/functions/activ_funcs.cpp
     ${SRCROOT}/AI/functions/loss_funcs.cpp
@@ -37,6 +38,7 @@ set(HEADERS
     # AI
     ${INCROOT}/AI/automated/RL/generation.h
     ${INCROOT}/AI/automated/SL/create.h
+    ${INCROOT}/AI/automated/SL/model_builder.h
     ${INCROOT}/AI/automated/RL.h
     ${INCROOT}/AI/automated/SL.h
 

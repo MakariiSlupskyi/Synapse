@@ -12,7 +12,7 @@ namespace syn {
         : syn::Optimizer(model, layers), rate(rate)
         {}
 
-        void train(const syn::Data& inputs, const syn::Data& labels, int epoches, bool printResult = true) override {
+        void train(const syn::Data& inputs, const syn::Data& labels, int epoches, bool printResult = false) override {
             for (int i = 0; i < epoches; ++i) {
                 syn::Tensor loss = labels[0].zeros();
 
@@ -21,6 +21,7 @@ namespace syn {
                     syn::Tensor loss = (labels[j] - model->predict(inputs[j])) * -2.0;
                     model->backward(loss);
                 }
+
 
                 // updating parameters
                 model->update(rate);

@@ -485,6 +485,42 @@ void syn::Tensor::increaseIndices(std::vector<int>& indices) const {
 }
 
 std::ostream& operator<<(std::ostream& os, const syn::Tensor& tensor) { 
-    os << "Printed Tensor...";
+	// Define tensor data
+	auto shape = tensor.getShape();
+	auto data = tensor.getData();
+	int dataIndex = 0;
+
+	// Recursive helper function to print nested elements
+	std::function<void(int)> printSubtensor = [&](int dim) {
+		if (dim == shape.size()) {
+			return;
+		}
+		else if (dim == shape.size() - 1) {
+			for (int i = 0; i < shape[dim]; ++i) {
+				os << data[dataIndex];
+				
+				if (i < shape[dim] - 1) {
+					os << ", ";
+				}
+
+				++dataIndex;
+			}
+			return;
+		}
+		for (int i = 0; i < shape[dim]; ++i) {
+			os << "[";
+			printSubtensor(dim + 1); // Recursive call for subtensors
+			os << "]";
+			if (i < shape[dim] - 1) {
+				os << ", ";
+			}
+		}
+	};
+
+	// Actually start printing
+	os << "[";
+	printSubtensor(0);
+	os << "]";
+
 	return os;
 }

@@ -10,6 +10,9 @@ namespace syn {
 		Convolutional(const std::vector<int>& inputShape, int kernelSize, int depth);
 		Convolutional(std::ifstream& file);
 
+        void randomize();
+        void tune(double alpha);
+
         syn::Tensor forward(const syn::Tensor& inputs) override;
         syn::Tensor backward(const syn::Tensor& outGrad) override;
 

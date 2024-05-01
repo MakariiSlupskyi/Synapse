@@ -20,6 +20,7 @@ namespace syn {
         Tensor& zeros();
         Tensor& ones();
         Tensor& randomize();
+        Tensor& tune(double alpha = 0.1);
 		Tensor& reverse();	
 		Tensor& reshape(const std::vector<int>& shape);
 	
@@ -87,6 +88,7 @@ namespace syn {
         int dataSize;
 
 	private:
+		double getRandom(double min, double max);
 		int getDataIndex(const std::vector<int>& indices) const;
 		void increaseIndices(std::vector<int>& indices) const;
     };

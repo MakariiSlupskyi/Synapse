@@ -10,6 +10,9 @@ namespace syn {
         virtual syn::Tensor forward(const syn::Tensor& inputs) = 0;
         virtual syn::Tensor backward(const syn::Tensor& outGrad) = 0;
 
+        virtual void randomize() = 0;
+        virtual void tune(double alpha) = 0;
+
         virtual void clearGradient() = 0;
         virtual void update(double learningRate) = 0;
     

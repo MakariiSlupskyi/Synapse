@@ -9,6 +9,9 @@ namespace syn {
     public:
         Dense(int nInput, int nOutput);
 		Dense(std::ifstream& file);
+        
+        void randomize() override;
+        void tune(double alpha) override;
 
         syn::Tensor forward(const syn::Tensor& inputs) override;
         syn::Tensor backward(const syn::Tensor& outputsGrad) override;

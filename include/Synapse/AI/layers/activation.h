@@ -10,6 +10,9 @@ namespace syn {
         Activation(const std::string& type);
 		Activation(std::ifstream& file);
 
+        void randomize() override {}
+        void tune(double alpha) override {}
+
 		syn::Tensor forward(const syn::Tensor& inputs) override;
 		syn::Tensor backward(const syn::Tensor& outGrad) override;
 

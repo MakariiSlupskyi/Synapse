@@ -33,11 +33,12 @@ header {
   display: flex;
   justify-content: flex-end;
   align-items: center;
-  padding: 30px 15%;
+  padding: 20px 15%;
+  background-color: #f3f3f3;
 }
 
 div {
-  padding: 15px 10%;
+  padding: 15px 15%;
 }
 
 .nav_links {

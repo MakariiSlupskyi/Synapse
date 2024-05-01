@@ -50,9 +50,16 @@ syn::Tensor& syn::Tensor::ones() {
 
 syn::Tensor& syn::Tensor::randomize() {
 	for (int i = 0; i < data.size(); ++i) {
-		data[i] = std::rand() / (float)RAND_MAX * 2.0 - 1.0;
+		data[i] = getRandom(-1.0, 1.0);
 	}
 	return *this;
+}
+
+syn::Tensor& syn::Tensor::tune(double alpha) {
+	for (int i = 0; i < data.size(); ++i) {
+		data[i] += getRandom(-alpha, alpha);
+	}
+	return *this;	
 }
 
 syn::Tensor& syn::Tensor::reshape(const std::vector<int>& shape) {
@@ -131,7 +138,7 @@ syn::Tensor syn::Tensor::slice(const std::vector<int>& indices) const {
 	}	
 	
 	// Get a chip
-	syn::Tensor res = this->chip(0,  indices.at(0));
+	syn::Tensor res = this->chip(0, indices.at(0));
 	
 	
 	if (indices.size() == 1) {
@@ -467,6 +474,11 @@ int syn::Tensor::getDataIndex(const std::vector<int>& indices) const {
         multiplier *= shape[i];
     }
     return result;
+}
+
+double syn::Tensor::getRandom(double min, double max) {
+	float res = float(rand()) / float(RAND_MAX);
+	return min + res * (max - min);
 }
 
 void syn::Tensor::increaseIndices(std::vector<int>& indices) const {

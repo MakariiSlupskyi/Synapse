@@ -8,6 +8,7 @@ set(SOURCES
 
     # AI
     ${SRCROOT}/AI/automated/RL/generation.cpp
+    ${SRCROOT}/AI/automated/RL/entity.cpp
     ${SRCROOT}/AI/automated/SL/create.cpp
     ${SRCROOT}/AI/automated/SL/model_builder.cpp
 
@@ -38,6 +39,7 @@ set(HEADERS
 
     # AI
     ${INCROOT}/AI/automated/RL/generation.h
+    ${INCROOT}/AI/automated/RL/entity.h
     ${INCROOT}/AI/automated/SL/create.h
     ${INCROOT}/AI/automated/SL/model_builder.h
     ${INCROOT}/AI/automated/RL.h

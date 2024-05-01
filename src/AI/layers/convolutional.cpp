@@ -84,6 +84,15 @@ syn::Tensor syn::Convolutional::backward(const syn::Tensor& outGrad) {
 	return inputGrad;
 }
 
+void syn::Convolutional::randomize() {
+	biases.randomize();
+	kernels.randomize();
+}
+
+void syn::Convolutional::tune(double alpha) {
+	biases.tune(alpha);
+	kernels.tune(alpha);
+}
 
 void syn::Convolutional::clearGradient() {
     kernelsGrad.zeros();

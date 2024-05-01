@@ -3,6 +3,7 @@
 #include <sstream>
 #include <cmath>
 
+
 std::vector<std::string> syn::split(std::string str, char separator) {
     std::vector<std::string> result;
     std::stringstream ss(str);

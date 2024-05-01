@@ -43,6 +43,16 @@ syn::Tensor syn::Dense::backward(const syn::Tensor& outputsGrad) {
     return weights.matTrans().matMul(outputsGrad);
 }
 
+void syn::Dense::randomize() {
+	biases.randomize();
+	weights.randomize();
+}
+
+void syn::Dense::tune(double alpha) {
+	biases.tune();
+	weights.tune();
+}
+
 void syn::Dense::clearGradient() {
     weightsGrad.zeros();
     outputsGrad.zeros();

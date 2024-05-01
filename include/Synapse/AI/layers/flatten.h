@@ -10,6 +10,9 @@ namespace syn {
 		Flatten() {}
 		Flatten(std::ifstream& file) {}
 
+        void randomize() override {}
+        void tune(double alpha) override {}
+		
 		syn::Tensor forward(const syn::Tensor& input) override;
 		syn::Tensor backward(const syn::Tensor& outputGrad) override;
 

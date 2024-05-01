@@ -56,6 +56,18 @@ void syn::Model::train(const syn::Data& inputs, const syn::Data& labels, int epo
 	optimizer->train(inputs, labels, epoches, printLoss);
 }
 
+void syn::Model::randomize() {
+	for (int i = 0; i < layers.size(); ++i) {
+		layers[i]->randomize();
+	}
+}
+
+void syn::Model::tune(double alpha) {
+	for (int i = 0; i < layers.size(); ++i) {
+		layers[i]->tune(alpha);
+	}
+}
+
 void syn::Model::save(const std::string& path) const {
 	std::ofstream file(path);
 

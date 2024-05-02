@@ -7,8 +7,7 @@ set(SOURCES
     ${SRCROOT}/linear/tensor_funcs.cpp
 
     # AI
-    ${SRCROOT}/AI/automated/RL/generation.cpp
-    ${SRCROOT}/AI/automated/RL/entity.cpp
+    ${SRCROOT}/AI/automated/RL/agent.cpp
     ${SRCROOT}/AI/automated/SL/create.cpp
     ${SRCROOT}/AI/automated/SL/model_builder.cpp
 
@@ -35,11 +34,10 @@ set(HEADERS
     ${INCROOT}/linear/tensor.h
     ${INCROOT}/linear/tensor_funcs.h
     ${INCROOT}/linear.h
-    ${INCROOT}/AI.h
 
     # AI
-    ${INCROOT}/AI/automated/RL/generation.h
-    ${INCROOT}/AI/automated/RL/entity.h
+    ${INCROOT}/AI/automated/RL/population.h
+    ${INCROOT}/AI/automated/RL/agent.h
     ${INCROOT}/AI/automated/SL/create.h
     ${INCROOT}/AI/automated/SL/model_builder.h
     ${INCROOT}/AI/automated/RL.h
@@ -48,6 +46,11 @@ set(HEADERS
     ${INCROOT}/AI/functions/activ_funcs.h
     ${INCROOT}/AI/functions/loss_funcs.h
     ${INCROOT}/AI/functions/other_funcs.h
+
+    ${INCROOT}/AI/interfaces/clonable.h
+    ${INCROOT}/AI/interfaces/layer.h
+    ${INCROOT}/AI/interfaces/savable.h
+    ${INCROOT}/AI/interfaces/tunable.h
 
     ${INCROOT}/AI/layers/layer.h
     ${INCROOT}/AI/layers/activation.h
@@ -67,6 +70,8 @@ set(HEADERS
     ${INCROOT}/AI/layers.h
     ${INCROOT}/AI/model.h
     ${INCROOT}/AI/optimizers.h
+    
+    ${INCROOT}/AI.h
 )
 
 # Add dynamic synapce library

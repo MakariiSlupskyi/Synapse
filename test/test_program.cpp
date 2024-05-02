@@ -10,16 +10,20 @@
 
 #include "Synapse/AI/automated.h"
 
-void print(const std::vector<double>& vec) {
-    for (int i = 0; i < vec.size() - 1; ++i) {
+void print(const std::vector<double> &vec)
+{
+    for (int i = 0; i < vec.size() - 1; ++i)
+    {
         std::cout << vec[i] << ", ";
     }
     std::cout << vec.back() << '\n';
 }
 
-int main() {
-    std::srand(std::time(nullptr));
+class Entity;
 
+int main()
+{
+    std::srand(std::time(nullptr));
 
     // // Test 1
     // syn::Model model({
@@ -53,50 +57,52 @@ int main() {
     //     print(model1.predict(training[i]).getData());
     // }
 
-    // Test 2
-    // syn::Data training({1, 3, 3}, {
-    //     {
-    //         0, 1, 0,
-    //         1, 0, 1,
-    //         0, 1, 0,
-    //     }, {
-    //         1, 0, 1,
-    //         0, 1, 0,
-    //         1, 0, 1,
-    //     },
-    // });
-
-    // syn::Data labels({1, 1}, {
-    //     {0}, {1},
-    // });
-
-    // syn::Model model({
-    //     new syn::Convolutional({1, 3, 3}, 3, 5),
-    //     new syn::Activation("sigmoid"),
-    //     new syn::Flatten(),
-    //     new syn::Dense(5, 1),
-    // });
-    // model.compile("GD", "MSE");
-
-    // print(model.predict(training[0]).getData());
-    // print(model.predict(training[1]).getData());
-
-    // model.train(training, labels, 100, true);
-
-    // print(model.predict(training[0]).getData());
-    // print(model.predict(training[1]).getData());
-
     // Test 3
-    syn::Data inputs({1, 1}, { {0}, {1}, {2} });
-    syn::Data labels({1, 1}, { {-4}, {-2}, {2}, {4} });
+    std::srand(std::time(nullptr));
 
-    auto model = syn::create(inputs, labels);
+    syn::Model model({
+        new syn::Dense(1, 5),
+        new syn::Activation("leaky relu"),
+        new syn::Dense(5, 1),
+    });
 
-    model.save("model.txt");
+    syn::Tensor inputs({1, 1}, {0.13});
 
-    syn::Model model2;
-    
-    model2.load("model.txt");
+    syn::Population<Entity> population(model, 5);
+
+    for (int i = 0; i < 10; ++i)
+    {
+        population.run(inputs);
+        std::cout << "\n";
+    }
+
+    std::cout << "Hooray!!\n";
 
     return 0;
 }
+
+class Entity : public syn::Agent
+{
+public:
+    Entity(const syn::Model &model) : Agent(model)
+    {
+    }
+
+    Entity(const syn::Model &model, std::initializer_list<double> list) : Agent(model)
+    {
+        x = *list.begin();
+    }
+
+    void step(const syn::Tensor &inputs) override
+    {
+        x += this->getOutput(inputs)({0, 0});
+        if (x < 0)
+        {
+            this->kill();
+        }
+        std::cout << x << ' ';
+    }
+
+private:
+    double x;
+};

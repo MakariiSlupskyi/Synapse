@@ -14,15 +14,12 @@ void syn::Agent::reward(double value)
     score += value;
 }
 
-#include <iostream>
 void syn::Agent::forget()
 {
     model.randomize();
-    std::cout << "agent forget\n";
 }
 
 void syn::Agent::mutate(double alpha)
 {
     model.tune(alpha);
-    std::cout << "agent mutate\n";
 }

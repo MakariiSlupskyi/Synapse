@@ -32,7 +32,7 @@ namespace syn
 
 template <typename T>
 syn::Population<T>::Population(const syn::Model &model, int size)
-    : size(size), genNumber(-1)
+    : size(size), genNumber(-1), baseModel(model)
 {
     best = std::make_unique<T>(model);
 }
@@ -75,6 +75,7 @@ void syn::Population<T>::step(const syn::Tensor &inputs)
             std::swap(population[i], best);
         }
 
+        // Delete dead agents
         if (!population[i]->isAlive())
         {
             population[i] = std::move(population.back());

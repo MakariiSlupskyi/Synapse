@@ -14,7 +14,7 @@ syn::Model::Model(const std::vector<syn::ILayer *> &layers)
 
 syn::Model::Model(const syn::ModelBuilder &builder)
 {
-	layers.resize(builder.getNumLayer());
+	layers.reserve(builder.getNumLayer());
 	for (int i = 0; i < builder.getNumLayer(); ++i)
 	{
 		layers[i] = builder.getLayers()[i];
@@ -24,8 +24,9 @@ syn::Model::Model(const syn::ModelBuilder &builder)
 	this->optimType = builder.getOptimType();
 }
 
-syn::Model::Model(const syn::Model &other) // FIXME
+syn::Model::Model(const syn::Model &other)
 {
+	layers.reserve(other.layers.size());
 	for (int i = 0; i < other.layers.size(); ++i)
 	{
 		layers.push_back(dynamic_cast<syn::ILayer *>(other.layers[i]->clone()));

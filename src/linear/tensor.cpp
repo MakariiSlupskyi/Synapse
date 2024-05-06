@@ -61,15 +61,12 @@ syn::Tensor &syn::Tensor::ones()
 	return *this;
 }
 
-#include <iostream>
 syn::Tensor &syn::Tensor::randomize()
 {
 	for (int i = 0; i < data.size(); ++i)
 	{
 		data[i] = getRandom(-1.0, 1.0);
-		std::cout << data[i] << ' ';
 	}
-	std::cout << std::endl;
 	return *this;
 }
 
@@ -78,9 +75,7 @@ syn::Tensor &syn::Tensor::tune(double alpha)
 	for (int i = 0; i < data.size(); ++i)
 	{
 		data[i] += getRandom(-alpha, alpha);
-		std::cout << data[i] << ' ';
 	}
-	std::cout << std::endl;
 	return *this;
 }
 

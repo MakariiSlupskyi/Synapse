@@ -18,8 +18,8 @@ void syn::Dense::randomize()
 
 void syn::Dense::tune(double alpha)
 {
-    biases.tune();
-    weights.tune();
+    biases.tune(alpha);
+    weights.tune(alpha);
 }
 
 void syn::Dense::save(std::ofstream &file) const

@@ -1,30 +1,36 @@
 #pragma once
 
-#include "Synapse/AI/layers/layer.h"
+#include "Synapse/AI/interfaces/layer.h"
 #include <string>
 
-namespace syn {
+namespace syn
+{
     class Activation : public syn::ILayer
     {
     public:
-        Activation(const std::string& type);
-		Activation(std::ifstream& file);
+        Activation() = default;
+        Activation(const std::string &type);
 
-        void randomize() override {}
-        void tune(double alpha) override {}
+        // Declare tunable interface
+        void randomize() final {}
+        void tune(double alpha) final {}
 
-		syn::Tensor forward(const syn::Tensor& inputs) override;
-		syn::Tensor backward(const syn::Tensor& outGrad) override;
+        // Declare savable interface
+        void save(std::ofstream &file) const;
+        void load(std::ifstream &file);
 
-        void clearGradient() override {}
-        void update(double learningRate) override {}
+        // Declare clonable interface
+        Activation *clone() const final;
 
-		void write(std::ofstream& file) const override;
+        // Declare Layer interface
+        syn::Tensor forward(const syn::Tensor &inputs) final;
+        syn::Tensor backward(const syn::Tensor &outputGrad) final;
+        void step(double rate) final {}
 
     private:
         std::string type;
-        syn::Tensor (*activFunc)(const syn::Tensor& tensor);
-        syn::Tensor (*activPrime)(const syn::Tensor& tensor);
-        syn::Tensor inputs;
+        syn::Tensor (*activFunc)(const syn::Tensor &tensor);
+        syn::Tensor (*activPrime)(const syn::Tensor &tensor);
+        syn::Tensor input;
     };
 }

@@ -3,7 +3,7 @@
 #include "Synapse/linear.h"
 #include <stdexcept>
 
-syn::Convolutional::Convolutional(const std::vector<int>& inputShape, int kernelSize, int depth)
+syn::Convolutional::Convolutional(const std::vector<int> &inputShape, int kernelSize, int depth)
 	: inputShape(inputShape), kernelSize(kernelSize), depth(depth)
 {
 	// Define temperary data
@@ -15,7 +15,7 @@ syn::Convolutional::Convolutional(const std::vector<int>& inputShape, int kernel
 	inputDepth = inputShape[0];
 	input = syn::Tensor(inputShape);
 	output = syn::Tensor(outputShape);
-	
+
 	biases = syn::Tensor(outputShape);
 	kernels = syn::Tensor({depth, inputDepth, kernelSize, kernelSize});
 
@@ -27,13 +27,53 @@ syn::Convolutional::Convolutional(const std::vector<int>& inputShape, int kernel
 	biases.randomize();
 }
 
-syn::Convolutional::Convolutional(std::ifstream& file) {
+void syn::Convolutional::randomize()
+{
+	biases.randomize();
+	kernels.randomize();
+}
+
+void syn::Convolutional::tune(double alpha)
+{
+	biases.tune(alpha);
+	kernels.tune(alpha);
+}
+
+void syn::Convolutional::save(std::ofstream &file) const
+{
+	file << "Convolutional\n";
+
+	for (auto elem : inputShape)
+	{
+		file << elem << ' ';
+	}
+	file << '\n';
+
+	file << kernelSize << '\n';
+
+	file << depth << '\n';
+
+	for (auto elem : biases.getData())
+	{
+		file << elem << ' ';
+	}
+	file << '\n';
+
+	for (auto elem : kernels.getData())
+	{
+		file << elem << ' ';
+	}
+	file << '\n';
+}
+
+void syn::Convolutional::load(std::ifstream &file)
+{
 	std::string line;
 
 	// Read general layel data
 	std::getline(file, line);
 	inputShape = syn::splitToI(line);
-	
+
 	std::getline(file, line);
 	kernelSize = std::stoi(line);
 
@@ -51,14 +91,27 @@ syn::Convolutional::Convolutional(std::ifstream& file) {
 	kernels.fill(syn::splitToD(line));
 }
 
-syn::Tensor syn::Convolutional::forward(const syn::Tensor& input) {
+syn::Convolutional *syn::Convolutional::clone() const
+{
+	auto res = new syn::Convolutional(inputShape, kernelSize, depth);
+
+	res->biases = biases;
+	res->kernels = kernels;
+
+	return res;
+}
+
+syn::Tensor syn::Convolutional::forward(const syn::Tensor &input)
+{
 	this->input.fill(input.getData());
 	output.fill(biases.getData());
 
-	for (int i = 0; i < depth; ++i) {
+	for (int i = 0; i < depth; ++i)
+	{
 		syn::Tensor slice = output.slice({i}), kernel = kernels.slice({i});
 
-		for (int j = 0; j < inputDepth; ++j) {
+		for (int j = 0; j < inputDepth; ++j)
+		{
 			slice += syn::correlate2d(input.slice({j}), kernel.slice({j}), "valid");
 		}
 
@@ -68,54 +121,30 @@ syn::Tensor syn::Convolutional::forward(const syn::Tensor& input) {
 	return output;
 }
 
-syn::Tensor syn::Convolutional::backward(const syn::Tensor& outGrad) {
+syn::Tensor syn::Convolutional::backward(const syn::Tensor &outGrad)
+{
 	syn::Tensor inputGrad(input.getShape());
 
-	for (int i = 0; i < depth; ++i) {
-		for (int j = 0; j < inputDepth; ++j) {
+	for (int i = 0; i < depth; ++i)
+	{
+		for (int j = 0; j < inputDepth; ++j)
+		{
 			kernelsGrad.setSlice({i, j}, syn::correlate2d(input.slice({j}), outGrad.slice({i}), "valid"));
 			inputGrad.setSlice({j}, inputGrad.slice({j}) + syn::convolve2d(outGrad.slice({i}), kernels.slice({i, j}), "full"));
 		}
 	}
-    
+
 	this->kernelsGrad += kernelsGrad;
 	this->biasesGrad += outGrad;
 
 	return inputGrad;
 }
 
-void syn::Convolutional::randomize() {
-	biases.randomize();
-	kernels.randomize();
-}
-
-void syn::Convolutional::tune(double alpha) {
-	biases.tune(alpha);
-	kernels.tune(alpha);
-}
-
-void syn::Convolutional::clearGradient() {
-    kernelsGrad.zeros();
-    biasesGrad.zeros();
-}
-
-void syn::Convolutional::update(double rate) {
+void syn::Convolutional::step(double rate)
+{
 	kernels -= kernelsGrad * rate;
 	biases -= biasesGrad * rate;
-}
-void syn::Convolutional::write(std::ofstream& file) const {
-	file << "Convolutional\n";
 
-	for (auto elem : inputShape) { file << elem << ' '; }
-	file << '\n';
-
-	file << kernelSize << '\n';
-
-	file << depth << '\n';
-
-	for (auto elem : biases.getData()) { file << elem << ' '; }
-	file << '\n';
-
-	for (auto elem : kernels.getData()) { file << elem << ' '; }
-	file << '\n';
+	kernelsGrad.zeros();
+	biasesGrad.zeros();
 }

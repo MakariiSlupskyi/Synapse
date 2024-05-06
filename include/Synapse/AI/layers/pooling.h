@@ -1,28 +1,34 @@
 #pragma once
 
-#include "Synapse/AI/layers/layer.h"
+#include "Synapse/AI/interfaces/layer.h"
 #include "Synapse/linear/tensor.h"
 
-namespace syn {
+namespace syn
+{
 	class Pooling : public syn::ILayer
 	{
 	public:
+		Pooling() = default;
 		Pooling(int poolSize, int strides = -1);
-		Pooling(std::ifstream& file);
-		
-        void randomize() override {}
-        void tune(double alpha) override {}
-		
-		syn::Tensor forward(const syn::Tensor& inputs) override;
-        syn::Tensor backward(const syn::Tensor& outGrad) override;
 
-        void clearGradient() override {}
-        void update(double learningRate) override {}
-    
-        void write(std::ofstream& file) const override;
+		// Declare tunable interface
+		void randomize() final {}
+		void tune(double alpha) final {}
+
+		// Declare savable interface
+		void save(std::ofstream &file) const;
+		void load(std::ifstream &file);
+
+		// Declare clonable interface
+		Pooling *clone() const final;
+
+		// Declare Layer interface
+		syn::Tensor forward(const syn::Tensor &inputs) final;
+		syn::Tensor backward(const syn::Tensor &outputGrad) final;
+		void step(double rate) final {}
 
 	private:
 		int poolSize, strides;
-		syn::Tensor inputs, outputs;
+		syn::Tensor input, output;
 	};
 }

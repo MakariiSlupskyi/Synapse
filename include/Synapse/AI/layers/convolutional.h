@@ -1,29 +1,35 @@
 #pragma once
 
-#include "Synapse/AI/layers/layer.h"
+#include "Synapse/AI/interfaces/layer.h"
 #include "Synapse/linear/tensor.h"
 
-namespace syn {
-    class Convolutional : public syn::ILayer
+namespace syn
+{
+	class Convolutional : public syn::ILayer
 	{
 	public:
-		Convolutional(const std::vector<int>& inputShape, int kernelSize, int depth);
-		Convolutional(std::ifstream& file);
+		Convolutional() = default;
+		Convolutional(const std::vector<int> &inputShape, int kernelSize, int depth);
 
-        void randomize();
-        void tune(double alpha);
+		// Declare tunable interface
+		void randomize() final;
+		void tune(double alpha) final;
 
-        syn::Tensor forward(const syn::Tensor& inputs) override;
-        syn::Tensor backward(const syn::Tensor& outGrad) override;
+		// Declare savable interface
+		void save(std::ofstream &file) const;
+		void load(std::ifstream &file);
 
-        void clearGradient() override;
-        void update(double learningRate) override;
-    
-        void write(std::ofstream& file) const override;
+		// Declare clonable interface
+		Convolutional *clone() const final;
+
+		// Declare Layer interface
+		syn::Tensor forward(const syn::Tensor &inputs) final;
+		syn::Tensor backward(const syn::Tensor &outputGrad) final;
+		void step(double rate) final;
 
 	private:
 		std::vector<int> inputShape;
 		int depth, inputDepth, kernelSize;
-		syn::Tensor biases, kernels, input, output, kernelsGrad, biasesGrad;
+		syn::Tensor input, output, biases, kernels, kernelsGrad, biasesGrad;
 	};
 }

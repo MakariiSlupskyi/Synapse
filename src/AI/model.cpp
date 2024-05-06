@@ -6,11 +6,11 @@
 #include <cmath>
 
 syn::Model::Model(const std::vector<syn::ILayer *> &layers)
-	: layers(layers), optimizer(nullptr), lossType(""), optimType("")
+	: layers(layers), lossType(""), optimType("")
 {
 }
 
-syn::Model::Model(const syn::ModelBuilder &builder) : optimizer(nullptr)
+syn::Model::Model(const syn::ModelBuilder &builder)
 {
 	layers.resize(builder.getNumLayer());
 	for (int i = 0; i < builder.getNumLayer(); ++i)
@@ -26,7 +26,7 @@ syn::Model::Model(const syn::Model &other) // FIXME
 {
 	for (int i = 0; i < other.layers.size(); ++i)
 	{
-		// layers.push_back(other.layers[i]->clone()); // Clone each layer using its clone() method
+		layers.push_back(dynamic_cast<syn::ILayer *>(other.layers[i]->clone()));
 	}
 
 	// Copy strings by value (efficient)
@@ -79,22 +79,21 @@ void syn::Model::train(const syn::Data &inputs, const syn::Data &labels, int epo
 	optimizer->train(inputs, labels, epoches, printLoss);
 }
 
-#include <iostream>
-void syn::Model::randomize()
+void syn::Model::backward(const syn::Tensor &loss)
 {
-	for (int i = 0; i < layers.size(); ++i)
+	auto l = loss;
+	for (int i = (int)layers.size() - 1; i >= 0; --i)
 	{
-		layers[i]->randomize();
-		std::cout << "model randomize\n";
+		l = layers[i]->backward(l);
 	}
 }
 
-void syn::Model::tune(double alpha)
+void syn::Model::update(double rate)
 {
-	for (int i = 0; i < layers.size(); ++i)
+	int size = layers.size();
+	for (int i = size - 1; i >= 0; --i)
 	{
-		layers[i]->tune(alpha);
-		std::cout << "model tune\n";
+		layers[i]->step(rate / size);
 	}
 }
 
@@ -111,13 +110,7 @@ void syn::Model::save(const std::string &path) const
 		throw std::invalid_argument("Model is not compiled so it cannot be saved");
 	}
 
-	file << optimType << ' ' << lossType << '\n';
-	file << layers.size() << '\n';
-
-	for (int i = 0; i < layers.size(); ++i)
-	{
-		layers[i]->write(file);
-	}
+	this->save(file);
 }
 
 syn::Model &syn::Model::load(const std::string &path)
@@ -128,6 +121,46 @@ syn::Model &syn::Model::load(const std::string &path)
 	{
 		throw std::invalid_argument("Can't open file: " + path);
 	}
+
+	this->load(file);
+
+	return *this;
+}
+
+void syn::Model::randomize()
+{
+	for (int i = 0; i < layers.size(); ++i)
+	{
+		layers[i]->randomize();
+	}
+}
+
+void syn::Model::tune(double alpha)
+{
+	for (int i = 0; i < layers.size(); ++i)
+	{
+		layers[i]->tune(alpha);
+	}
+}
+
+syn::Model syn::Model::clone() const
+{
+	return syn::Model();
+}
+
+void syn::Model::save(std::ofstream &file) const
+{
+	file << optimType << ' ' << lossType << '\n';
+	file << layers.size() << '\n';
+
+	for (int i = 0; i < layers.size(); ++i)
+	{
+		layers[i]->save(file);
+	}
+}
+
+void syn::Model::load(std::ifstream &file)
+{
 	std::string line;
 
 	// read the number of layers
@@ -144,29 +177,9 @@ syn::Model &syn::Model::load(const std::string &path)
 	for (int i = 0; i < nLayer; ++i)
 	{
 		std::getline(file, line);
-		layers.push_back(syn::file_layers.at(line)(file));
+		layers.push_back(syn::layers.at(line)());
+		layers.back()->load(file);
 	}
 
 	file.close();
-
-	return *this;
-}
-
-void syn::Model::backward(const syn::Tensor &loss)
-{
-	auto l = loss;
-	for (int i = (int)layers.size() - 1; i >= 0; --i)
-	{
-		l = layers[i]->backward(l);
-	}
-}
-
-void syn::Model::update(double rate)
-{
-	int size = layers.size();
-	for (int i = size - 1; i >= 0; --i)
-	{
-		layers[i]->update(rate / size);
-		layers[i]->clearGradient();
-	}
 }

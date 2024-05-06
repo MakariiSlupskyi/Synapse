@@ -1,9 +1,14 @@
 #include "Synapse/AI/layers.h"
 
-const std::map<std::string, std::function<syn::ILayer*(std::ifstream& file)>> syn::file_layers {
-	{ "Activation", [](std::ifstream& file) -> syn::ILayer* { return new syn::Activation(file); } },
-	{ "Convolutional", [](std::ifstream& file) -> syn::ILayer* { return new syn::Convolutional(file); } },
-	{ "Dense", [](std::ifstream& file) -> syn::ILayer* { return new syn::Dense(file); } },
-	{ "Flatten", [](std::ifstream& file) -> syn::ILayer* { return new syn::Flatten(file); } },
-	{ "Pooling", [](std::ifstream& file) -> syn::ILayer* { return new syn::Pooling(file); } },
+const std::map<std::string, std::function<syn::ILayer *()>> syn::layers{
+	{"Activation", []() -> syn::ILayer *
+	 { return new syn::Activation(); }},
+	{"Convolutional", []() -> syn::ILayer *
+	 { return new syn::Convolutional(); }},
+	{"Dense", []() -> syn::ILayer *
+	 { return new syn::Dense(); }},
+	{"Flatten", []() -> syn::ILayer *
+	 { return new syn::Flatten(); }},
+	{"Pooling", []() -> syn::ILayer *
+	 { return new syn::Pooling(); }},
 };

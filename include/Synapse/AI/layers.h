@@ -9,9 +9,10 @@
 #include <string>
 #include <map>
 
-namespace syn {
+namespace syn
+{
     extern const std::map<
         std::string,
-        std::function<syn::ILayer*(std::ifstream& file)>
-    > file_layers;
+        std::function<syn::ILayer *()>>
+        layers;
 }

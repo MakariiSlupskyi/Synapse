@@ -52,7 +52,6 @@ set(HEADERS
     ${INCROOT}/AI/interfaces/savable.h
     ${INCROOT}/AI/interfaces/tunable.h
 
-    ${INCROOT}/AI/layers/layer.h
     ${INCROOT}/AI/layers/activation.h
     ${INCROOT}/AI/layers/convolutional.h
     ${INCROOT}/AI/layers/dense.h

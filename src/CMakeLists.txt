@@ -21,10 +21,13 @@ set(SOURCES
     ${SRCROOT}/AI/layers/flatten.cpp
     ${SRCROOT}/AI/layers/pooling.cpp
 
+    ${SRCROOT}/AI/maps/activ_funcs_map.cpp
+    ${SRCROOT}/AI/maps/layers_map.cpp
+    ${SRCROOT}/AI/maps/loss_funcs_map.cpp
+    ${SRCROOT}/AI/maps/optimizers_map.cpp
+
     ${SRCROOT}/AI/data.cpp
     ${SRCROOT}/AI/dataset.cpp
-    ${SRCROOT}/AI/functions.cpp
-    ${SRCROOT}/AI/layers.cpp
     ${SRCROOT}/AI/model.cpp
     ${SRCROOT}/AI/optimizers.cpp
 )
@@ -58,6 +61,11 @@ set(HEADERS
     ${INCROOT}/AI/layers/flatten.h
     ${INCROOT}/AI/layers/pooling.h
     
+    ${INCROOT}/AI/maps/activ_funcs_map.h
+    ${INCROOT}/AI/maps/layers_map.h
+    ${INCROOT}/AI/maps/loss_funcs_map.h
+    ${INCROOT}/AI/maps/optimizers_map.h
+
     ${INCROOT}/AI/optimizers/optimizer.h
     ${INCROOT}/AI/optimizers/GD.h
     ${INCROOT}/AI/optimizers/SGD.h
@@ -67,6 +75,7 @@ set(HEADERS
     ${INCROOT}/AI/dataset.h
     ${INCROOT}/AI/functions.h
     ${INCROOT}/AI/layers.h
+    ${INCROOT}/AI/maps.h
     ${INCROOT}/AI/model.h
     ${INCROOT}/AI/optimizers.h
     

@@ -1,8 +1,8 @@
 #include "Synapse/AI/layers/activation.h"
-#include "Synapse/AI/functions.h"
+#include "Synapse/AI/maps/activ_funcs_map.h"
 
 syn::Activation::Activation(const std::string &type)
-	: type(type), activFunc(syn::activFuncs.at(type)), activPrime(syn::activPrimes.at(type))
+	: type(type), function(syn::activFuncs.at(type)), derivative(syn::activDerivs.at(type))
 {
 }
 
@@ -30,10 +30,10 @@ syn::Activation *syn::Activation::clone() const
 syn::Tensor syn::Activation::forward(const syn::Tensor &inputs)
 {
 	this->input = input;
-	return activFunc(inputs);
+	return function(inputs);
 }
 
 syn::Tensor syn::Activation::backward(const syn::Tensor &outGrad)
 {
-	return outGrad * activPrime(input);
+	return outGrad * derivative(input);
 }

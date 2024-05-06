@@ -1,6 +1,8 @@
 #include "Synapse/AI/model.h"
 #include "Synapse/AI/optimizers.h"
-#include "Synapse/AI/layers.h"
+#include "Synapse/AI/maps/loss_funcs_map.h"
+#include "Synapse/AI/maps/layers_map.h"
+#include "Synapse/AI/maps/optimizers_map.h"
 #include "Synapse/AI/data.h"
 #include "Synapse/AI/functions.h"
 #include <cmath>

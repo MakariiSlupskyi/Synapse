@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Synapse/AI/interfaces/layer.h"
+#include <functional>
 #include <string>
 
 namespace syn
@@ -29,8 +30,8 @@ namespace syn
 
     private:
         std::string type;
-        syn::Tensor (*activFunc)(const syn::Tensor &tensor);
-        syn::Tensor (*activPrime)(const syn::Tensor &tensor);
         syn::Tensor input;
+        std::function<syn::Tensor(const syn::Tensor &)> function;
+        std::function<syn::Tensor(const syn::Tensor &)> derivative;
     };
 }

@@ -1,4 +1,6 @@
-#include "Synapse/AI/layers.h"
+#pragma once
+
+#include "Synapse/AI/interfaces/layer.h"
 #include <functional>
 #include <string>
 #include <map>

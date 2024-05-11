@@ -8,6 +8,7 @@ namespace syn
     {
     public:
         Agent(const syn::Model &model);
+        Agent(const Agent *other);
 
         double getScore() const { return score; }
         bool isAlive() const { return alive; }

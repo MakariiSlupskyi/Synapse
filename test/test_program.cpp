@@ -60,21 +60,24 @@ int main()
     // Test 3
     std::srand(std::time(nullptr));
 
-    syn::Model model({
-        new syn::Dense(1, 5),
-        new syn::Activation("leaky relu"),
-        new syn::Dense(5, 1),
-    });
+    // syn::Model model({
+    //     new syn::Dense(1, 5),
+    //     new syn::Activation("leaky relu"),
+    //     new syn::Dense(5, 1),
+    // });
 
-    syn::Tensor inputs({1, 1}, {0.13});
+    // syn::Tensor inputs({1, 1}, {0.13});
 
-    syn::Population<Entity> population(model, 5);
+    // syn::Population<Entity> population(model, 5);
 
-    for (int i = 0; i < 10; ++i)
-    {
-        population.run(inputs);
-        std::cout << "\n";
-    }
+    // for (int i = 0; i < 100; ++i)
+    // {
+    //     population.run(inputs);
+    //     std::cout << "\n";
+    // }
+
+    syn::Data data({1, 2}, {{1, 0}, {0, 1}, {0, 0}, {1, 1}});
+    data.save("daat.txt");
 
     std::cout << "Hooray!!\n";
 

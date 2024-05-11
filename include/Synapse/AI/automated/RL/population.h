@@ -43,7 +43,7 @@ void syn::Population<T>::create(std::initializer_list<double> list)
     population.clear();
     population.reserve(size);
 
-    if (genNumber == -1) // If creation first generation
+    if (genNumber == -1) // If creating first generation
     {
         for (int i = 0; i < size; ++i)
         {
@@ -55,8 +55,8 @@ void syn::Population<T>::create(std::initializer_list<double> list)
     {
         for (int i = 0; i < size; ++i)
         {
-            population.push_back(std::make_unique<T>(baseModel, list));
-            population[i]->mutate(0.1);
+            population.push_back(std::make_unique<T>(*best));
+            population[i]->mutate(0.01);
         }
     }
 
@@ -73,6 +73,7 @@ void syn::Population<T>::step(const syn::Tensor &inputs)
         if (population[i]->getScore() > best->getScore())
         {
             std::swap(population[i], best);
+            // baseModel = population[i]->model;
         }
 
         // Delete dead agents

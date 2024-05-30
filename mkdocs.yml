@@ -2,8 +2,7 @@ site_name: Synapse
 nav:
   - Home: index.md
   - Documentation: docs.md
-  - Examples: examples.md
-  - Class references: refs.md
+  - Available functionality: available.md
 
 theme:
   name: material
@@ -39,16 +38,7 @@ theme:
       accent: teal
 
 plugins:
-  # - social
   - search
-# extra:
-#   social:
-#     - icon: fontawesome/brands/github-alt
-#       link: https://github.com/james-willett
-#     - icon: fontawesome/brands/twitter
-#       link: https://twitter.com/TheJamesWillett
-#     - icon: fontawesome/brands/linkedin
-#       link: https://www.linkedin.com/in/willettjames/
 markdown_extensions:
   - pymdownx.highlight:
       anchor_linenums: true
@@ -67,7 +57,3 @@ markdown_extensions:
   - pymdownx.emoji:
       emoji_index: !!python/name:material.extensions.emoji.twemoji
       emoji_generator: !!python/name:materialx.emoji.to_svg
-        # copyright: |
-        #   &copy; 2023 <a href="https://github.com/james-willett"  target="_blank" rel="noopener">James Willett</a>
-
-

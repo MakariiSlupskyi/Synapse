@@ -31,4 +31,17 @@ cmake --build .
 
 ## Quick Start
 
-To check if Synapse works properly use this s
+To check if Synapse works properly use this simple code example
+
+```c++
+#include <Synapse/AI.h>
+
+int main()
+{
+    syn::Data inputs({1, 1}, {{0}, {1}, {2}});
+    syn::Data labels({1, 1}, {{0}, {2}, {3}});
+
+    syn::Model model = syn::create(inputs, labels);
+    model.save("model.txt");
+}
+```

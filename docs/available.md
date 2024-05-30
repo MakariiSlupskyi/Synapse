@@ -1,44 +1,50 @@
-# Available functionality
+# Available Functionality
 
-**syn::Model Interface Reference:**
-| Method's name | Explaination |
-| :------------- | :--- |
-| compile | Set optimizer and loss function |
-| predict | Push some input to model and get some output |
-| train | Train model |
-| evaluate | Get current loss value |
+## syn::Model Interface Reference
 
-**syn::Data Interface Reference:**
-| Method's name | Explaination |
-| :------------- | :--- |
-| shuffle | Shuffle data |
-| size | Get size of data |
-| merge | Merge two data instances to a signle one |
-| extract | Get some part of a data |
+| Method's Name | Explanation                                      |
+| :------------ | :----------------------------------------------- |
+| `compile`     | Set optimizer and loss function                  |
+| `predict`     | Push some input to the model and get some output |
+| `train`       | Train the model                                  |
+| `evaluate`    | Get the current loss value                       |
 
-**Layers:**
-| Name | How to call in Synapse |
-| :----- | :--- |
-| Dense | syn::Dense(int nInput, int nOutput) |
-| Activation | syn::Activation(const std::string& type) |
-| Convolutional | syn::Conv() |
+## syn::Data Interface Reference
 
-**Activation functions:**
-| Name | How to call in Synapse |
-| :----- | :---: |
-| ReLU | "relu" |
-| Leaky ReLU | "leaky relu" |
-| Sigmoid | "sigmoid" |
+| Method's Name | Explanation                                |
+| :------------ | :----------------------------------------- |
+| `shuffle`     | Shuffle data                               |
+| `size`        | Get the size of the data                   |
+| `merge`       | Merge two data instances into a single one |
+| `extract`     | Get a part of the data                     |
 
-**Loss functions:**
-| Name | How to call in Synapse |
-| :----- | :---: |
-| Mean Squared Error | "MSE" |
-| Binary Cross-Entropy | "BCE" |
-| Categorical Cross-Entropy | "CCE" |
+## Layers
 
-**Optimizers:**
-| Name | How to call in Synapse |
-| :----- | :---: |
-| Gradient Descent | "GD" |
-| Sticastic Gradient Descent | "SGD" |
+| Name          | How to Call in Synapse                     |
+| :------------ | :----------------------------------------- |
+| Dense         | `syn::Dense(int nInput, int nOutput)`      |
+| Activation    | `syn::Activation(const std::string& type)` |
+| Convolutional | `syn::Conv()`                              |
+
+## Activation Functions
+
+| Name       | How to Call in Synapse |
+| :--------- | :--------------------: |
+| ReLU       |        `"relu"`        |
+| Leaky ReLU |     `"leaky relu"`     |
+| Sigmoid    |      `"sigmoid"`       |
+
+## Loss Functions
+
+| Name                      | How to Call in Synapse |
+| :------------------------ | :--------------------: |
+| Mean Squared Error        |        `"MSE"`         |
+| Binary Cross-Entropy      |        `"BCE"`         |
+| Categorical Cross-Entropy |        `"CCE"`         |
+
+## Optimizers
+
+| Name                        | How to Call in Synapse |
+| :-------------------------- | :--------------------: |
+| Gradient Descent            |         `"GD"`         |
+| Stochastic Gradient Descent |        `"SGD"`         |
